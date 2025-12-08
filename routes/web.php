@@ -109,4 +109,6 @@ Route::controller(User_front_controller::class)->group(function(){
 // =============== create store ======================
 Route::controller(Create_Store::class)->group(function(){
     Route::get('/register/store','index')->name('register.store.page');
+    Route::post('/register/store','register_store')->name('register.store');
+    Route::get('/store/dashboard','dashboard')->name('store.dashboard');
 });

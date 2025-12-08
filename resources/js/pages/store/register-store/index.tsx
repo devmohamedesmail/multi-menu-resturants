@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import InputError from '@/components/input-error'
+import ImageUpload from '@/components/image-upload'
 import { CheckCircle2, Store, User, ArrowRight, ArrowLeft } from 'lucide-react'
 
 type RegisterStoreForm = {
@@ -20,6 +21,8 @@ type RegisterStoreForm = {
     store_phone: string
     store_address: string
     store_description: string
+    image: File | null
+    banner: File | null
 }
 
 export default function RegisterStore() {
@@ -27,7 +30,7 @@ export default function RegisterStore() {
     const [currentStep, setCurrentStep] = useState(1)
     const totalSteps = 2
 
-    const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterStoreForm>>({
+    const { data, setData, post, processing, errors, reset } = useForm<RegisterStoreForm>({
         name: '',
         email: '',
         password: '',
@@ -37,6 +40,8 @@ export default function RegisterStore() {
         store_phone: '',
         store_address: '',
         store_description: '',
+        image: null,
+        banner: null,
     })
 
     const handleNextStep = () => {
@@ -228,6 +233,27 @@ export default function RegisterStore() {
                                             />
                                             <InputError message={errors.store_name} />
                                         </div>
+
+                                        <ImageUpload
+                                            id="image"
+                                            label={t('store-logo')}
+                                            required
+                                            accept="image/*"
+                                            onChange={(file) => setData('image', file)}
+                                            disabled={processing}
+                                            error={errors.image}
+                                            previewClassName="h-40 object-contain"
+                                        />
+
+                                        <ImageUpload
+                                            id="banner"
+                                            label={`${t('store-banner')} (${t('optional')})`}
+                                            accept="image/*"
+                                            onChange={(file) => setData('banner', file)}
+                                            disabled={processing}
+                                            error={errors.banner}
+                                            previewClassName="h-48 object-cover"
+                                        />
 
                                         <div className="grid gap-2">
                                             <Label htmlFor="store_email">
