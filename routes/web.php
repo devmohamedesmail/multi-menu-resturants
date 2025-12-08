@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\Meal_controller;
 use App\Http\Controllers\admin\Order_controller;
 use App\Http\Controllers\admin\Setting_controller;
 use App\Http\Controllers\admin\Users_controller;
+use App\Http\Controllers\user\Create_Store;
 use App\Http\Controllers\user\User_front_controller;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
@@ -94,10 +95,18 @@ require __DIR__.'/auth.php';
 
 // **************************************************************************************
 Route::controller(User_front_controller::class)->group(function(){
+
     Route::get('/{table?}','index')->name('home');
     Route::post('/send/order','send_order')->name('send.order');
     Route::get('/category/meals/{id}','category_meals')->name('category.meals.page');
     Route::get('/checkout/page','checkout_page')->name('checkout.page');
     Route::post('/send/feedback','send_feedback')->name('send.feedback');
     Route::get('/show/menu/','show_menu')->name('show.menu');
+});
+
+
+
+// =============== create store ======================
+Route::controller(Create_Store::class)->group(function(){
+    Route::get('/register/store','index')->name('register.store.page');
 });

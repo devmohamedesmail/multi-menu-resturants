@@ -95,7 +95,34 @@
     "fresh-daily": "Fresh Daily",
     "fast-service": "Fast Service",
     "explore-menu": "Explore Menu"
-  }
-
-
+  },
+  "register-store": "Register Your Store",
+  "store-registration": "Store Registration",
+  "store-name": "Store Name",
+  "store-email": "Store Email",
+  "store-phone": "Store Phone",
+  "store-address": "Store Address",
+  "store-description": "Store Description",
+  "store-logo": "Store Logo",
+  "store-banner": "Store Banner",
+  "step": "Step",
+  "of": "of",
+  "next": "Next",
+  "previous": "Previous",
+  "submit": "Submit",
+  "account-info": "Account Information",
+  "store-info": "Store Information",
+  "create-your-account": "Create Your Account",
+  "setup-your-store": "Setup Your Store",
+  "full-name": "Full Name",
+  "enter-full-name": "Enter your full name",
+  "enter-email": "Enter your email",
+  "enter-password": "Enter your password",
+  "enter-store-name": "Enter your store name",
+  "enter-store-email": "Enter store email",
+  "enter-store-phone": "Enter store phone number",
+  "enter-store-address": "Enter store address",
+  "enter-store-description": "Enter store description",
+  "optional": "Optional",
+  "complete-registration": "Complete Registration"
 }

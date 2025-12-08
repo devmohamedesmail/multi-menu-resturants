@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('meals', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('store_id')->constrained()->onDelete('cascade');
             $table->string('name_en')->nullable();
             $table->string('name_ar')->nullable();
             $table->longText('description_en')->nullable();
             $table->longText('description_ar')->nullable();
             $table->longText('image')->nullable();
-            $table->string('price')->nullable();
-
+            $table->decimal('price',10,2)->nullable();
+            $table->decimal('sale_price',10,2)->nullable();
             $table->timestamps();
         });
     }

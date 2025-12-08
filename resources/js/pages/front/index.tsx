@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux'
 import { add_to_cart } from '@/reducers/cartSlice';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import Header from '@/components/front/Header';
 import MealItem from '@/components/custom/MealItem';
 import CategoryItem from '@/components/custom/CategoryItem';
@@ -89,6 +89,11 @@ function index({ categories, meals, table }: Props) {
         <div>
             <Head title='Home' />
             <Header />
+
+
+
+
+            <Link href="/register/store" className='text-white'>{t('register.store')}</Link>
 
 
             <div className='container m-auto px-5'>
