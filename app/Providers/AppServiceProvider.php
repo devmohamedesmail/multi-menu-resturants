@@ -20,9 +20,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // app settings
         Inertia::share('app_settings', function () {
-            return Setting::first(); 
+            return Setting::first();
         });
+
+        // auth user
+        Inertia::share([
+        'auth' => function () {
+            return auth()->check()
+                ? ['user' => auth()->user()]
+                : ['user' => null];
+        }
+    ]);
+
     }
 }

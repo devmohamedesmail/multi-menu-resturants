@@ -1,6 +1,8 @@
-import React, { useState, FormEventHandler } from 'react'
-import { Head, useForm, router } from '@inertiajs/react'
+import React, { useState } from 'react'
+import { Head, router } from '@inertiajs/react'
 import { useTranslation } from 'react-i18next'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -8,47 +10,92 @@ import { Label } from '@/components/ui/label'
 import InputError from '@/components/input-error'
 import ImageUpload from '@/components/image-upload'
 import { CheckCircle2, Store, User, ArrowRight, ArrowLeft } from 'lucide-react'
-
-type RegisterStoreForm = {
-    // User Information (Step 1)
-    name: string
-    email: string
-    password: string
-    password_confirmation: string
-    // Store Information (Step 2)
-    store_name: string
-    store_email: string
-    store_phone: string
-    store_address: string
-    store_description: string
-    image: File | null
-    banner: File | null
-}
+import LanguageSwitcher from '@/components/front/LanguageSwitcher'
 
 export default function RegisterStore() {
     const { t } = useTranslation()
     const [currentStep, setCurrentStep] = useState(1)
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const totalSteps = 2
 
-    const { data, setData, post, processing, errors, reset } = useForm<RegisterStoreForm>({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
-        store_name: '',
-        store_email: '',
-        store_phone: '',
-        store_address: '',
-        store_description: '',
-        image: null,
-        banner: null,
+    const validationSchema = Yup.object({
+        name: Yup.string().required('Name is required'),
+        email: Yup.string().email('Invalid email').required('Email is required'),
+        password: Yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
+        password_confirmation: Yup.string()
+            .oneOf([Yup.ref('password')], 'Passwords must match')
+            .required('Confirm password is required'),
+        store_name: Yup.string().required('Store name is required'),
+        store_email: Yup.string().email('Invalid email').nullable(),
+        store_phone: Yup.string().nullable(),
+        store_address: Yup.string().nullable(),
+        store_description: Yup.string().nullable(),
+        image: Yup.mixed().required('Store logo is required'),
+        banner: Yup.mixed().nullable(),
     })
 
-    const handleNextStep = () => {
-        // Validate current step before proceeding
+    const formik = useFormik({
+        initialValues: {
+            name: '',
+            email: '',
+            password: '',
+            password_confirmation: '',
+            store_name: '',
+            store_email: '',
+            store_phone: '',
+            store_address: '',
+            store_description: '',
+            image: null as File | null,
+            banner: null as File | null,
+        },
+        validationSchema,
+        onSubmit: async (values) => {
+            setIsSubmitting(true)
+
+            const formData = new FormData()
+            formData.append('name', values.name)
+            formData.append('email', values.email)
+            formData.append('password', values.password)
+            formData.append('password_confirmation', values.password_confirmation)
+            formData.append('store_name', values.store_name)
+            if (values.store_email) formData.append('store_email', values.store_email)
+            if (values.store_phone) formData.append('store_phone', values.store_phone)
+            if (values.store_address) formData.append('store_address', values.store_address)
+            if (values.store_description) formData.append('store_description', values.store_description)
+            if (values.image) formData.append('image', values.image)
+            if (values.banner) formData.append('banner', values.banner)
+
+            try {
+                await router.post(route('register.store'), formData, {
+                    onSuccess: () => {
+                        router.visit('/')
+                    },
+                    onError: (errors) => {
+                        setIsSubmitting(false)
+                        Object.keys(errors).forEach((key) => {
+                            formik.setFieldError(key, errors[key])
+                        })
+                    },
+                })
+            } catch (error) {
+                setIsSubmitting(false)
+            }
+        },
+    })
+
+    const handleNextStep = async () => {
         if (currentStep === 1) {
-            if (data.name && data.email && data.password && data.password_confirmation) {
+            const step1Fields = ['name', 'email', 'password', 'password_confirmation']
+            const errors = await formik.validateForm()
+            // const step1Errors = step1Fields.filter(field => errors[field])
+            const step1Errors = step1Fields.filter(
+                (field) => (errors as Record<string, any>)[field]
+            )
+
+            if (step1Errors.length === 0) {
                 setCurrentStep(2)
+            } else {
+                step1Fields.forEach(field => formik.setFieldTouched(field, true))
             }
         }
     }
@@ -59,21 +106,10 @@ export default function RegisterStore() {
         }
     }
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault()
-        post(route('register.store'), {
-            onSuccess: () => {
-                // Redirect to front store index page
-                router.visit('/')
-            },
-            onFinish: () => reset('password', 'password_confirmation'),
-        })
-    }
-
     return (
         <>
             <Head title={t('register-store')} />
-            
+            <LanguageSwitcher />
             <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
                 <div className="w-full max-w-2xl">
                     {/* Header */}
@@ -96,11 +132,10 @@ export default function RegisterStore() {
                                 <React.Fragment key={step}>
                                     <div className="flex flex-col items-center flex-1">
                                         <div
-                                            className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all ${
-                                                currentStep >= step
+                                            className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all ${currentStep >= step
                                                     ? 'bg-primary text-white'
                                                     : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
-                                            }`}
+                                                }`}
                                         >
                                             {currentStep > step ? (
                                                 <CheckCircle2 className="w-6 h-6" />
@@ -114,11 +149,10 @@ export default function RegisterStore() {
                                     </div>
                                     {step < totalSteps && (
                                         <div
-                                            className={`flex-1 h-1 mx-2 transition-all ${
-                                                currentStep > step
+                                            className={`flex-1 h-1 mx-2 transition-all ${currentStep > step
                                                     ? 'bg-primary'
                                                     : 'bg-gray-200 dark:bg-gray-700'
-                                            }`}
+                                                }`}
                                         />
                                     )}
                                 </React.Fragment>
@@ -148,7 +182,7 @@ export default function RegisterStore() {
                         </CardHeader>
 
                         <CardContent>
-                            <form onSubmit={submit} className="space-y-6">
+                            <form onSubmit={formik.handleSubmit} className="space-y-6">
                                 {/* Step 1: User Account Information */}
                                 {currentStep === 1 && (
                                     <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
@@ -156,61 +190,73 @@ export default function RegisterStore() {
                                             <Label htmlFor="name">{t('full-name')}</Label>
                                             <Input
                                                 id="name"
+                                                name="name"
                                                 type="text"
-                                                required
                                                 autoFocus
-                                                value={data.name}
-                                                onChange={(e) => setData('name', e.target.value)}
-                                                disabled={processing}
+                                                value={formik.values.name}
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                disabled={isSubmitting}
                                                 placeholder={t('enter-full-name')}
                                                 className="h-11"
                                             />
-                                            <InputError message={errors.name} />
+                                            {formik.touched.name && formik.errors.name && (
+                                                <InputError message={formik.errors.name} />
+                                            )}
                                         </div>
 
                                         <div className="grid gap-2">
                                             <Label htmlFor="email">{t('email')}</Label>
                                             <Input
                                                 id="email"
+                                                name="email"
                                                 type="email"
-                                                required
-                                                value={data.email}
-                                                onChange={(e) => setData('email', e.target.value)}
-                                                disabled={processing}
+                                                value={formik.values.email}
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                disabled={isSubmitting}
                                                 placeholder={t('enter-email')}
                                                 className="h-11"
                                             />
-                                            <InputError message={errors.email} />
+                                            {formik.touched.email && formik.errors.email && (
+                                                <InputError message={formik.errors.email} />
+                                            )}
                                         </div>
 
                                         <div className="grid gap-2">
                                             <Label htmlFor="password">{t('password')}</Label>
                                             <Input
                                                 id="password"
+                                                name="password"
                                                 type="password"
-                                                required
-                                                value={data.password}
-                                                onChange={(e) => setData('password', e.target.value)}
-                                                disabled={processing}
+                                                value={formik.values.password}
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                disabled={isSubmitting}
                                                 placeholder={t('enter-password')}
                                                 className="h-11"
                                             />
-                                            <InputError message={errors.password} />
+                                            {formik.touched.password && formik.errors.password && (
+                                                <InputError message={formik.errors.password} />
+                                            )}
                                         </div>
 
                                         <div className="grid gap-2">
                                             <Label htmlFor="password_confirmation">{t('confirm-password')}</Label>
                                             <Input
                                                 id="password_confirmation"
+                                                name="password_confirmation"
                                                 type="password"
-                                                required
-                                                value={data.password_confirmation}
-                                                onChange={(e) => setData('password_confirmation', e.target.value)}
-                                                disabled={processing}
+                                                value={formik.values.password_confirmation}
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                disabled={isSubmitting}
                                                 placeholder={t('confirm-password')}
                                                 className="h-11"
                                             />
-                                            <InputError message={errors.password_confirmation} />
+                                            {formik.touched.password_confirmation && formik.errors.password_confirmation && (
+                                                <InputError message={formik.errors.password_confirmation} />
+                                            )}
                                         </div>
                                     </div>
                                 )}
@@ -222,16 +268,19 @@ export default function RegisterStore() {
                                             <Label htmlFor="store_name">{t('store-name')}</Label>
                                             <Input
                                                 id="store_name"
+                                                name="store_name"
                                                 type="text"
-                                                required
                                                 autoFocus
-                                                value={data.store_name}
-                                                onChange={(e) => setData('store_name', e.target.value)}
-                                                disabled={processing}
+                                                value={formik.values.store_name}
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                disabled={isSubmitting}
                                                 placeholder={t('enter-store-name')}
                                                 className="h-11"
                                             />
-                                            <InputError message={errors.store_name} />
+                                            {formik.touched.store_name && formik.errors.store_name && (
+                                                <InputError message={formik.errors.store_name} />
+                                            )}
                                         </div>
 
                                         <ImageUpload
@@ -239,9 +288,9 @@ export default function RegisterStore() {
                                             label={t('store-logo')}
                                             required
                                             accept="image/*"
-                                            onChange={(file) => setData('image', file)}
-                                            disabled={processing}
-                                            error={errors.image}
+                                            onChange={(file) => formik.setFieldValue('image', file)}
+                                            disabled={isSubmitting}
+                                            error={formik.touched.image && formik.errors.image ? String(formik.errors.image) : undefined}
                                             previewClassName="h-40 object-contain"
                                         />
 
@@ -249,9 +298,9 @@ export default function RegisterStore() {
                                             id="banner"
                                             label={`${t('store-banner')} (${t('optional')})`}
                                             accept="image/*"
-                                            onChange={(file) => setData('banner', file)}
-                                            disabled={processing}
-                                            error={errors.banner}
+                                            onChange={(file) => formik.setFieldValue('banner', file)}
+                                            disabled={isSubmitting}
+                                            error={formik.touched.banner && formik.errors.banner ? String(formik.errors.banner) : undefined}
                                             previewClassName="h-48 object-cover"
                                         />
 
@@ -261,14 +310,18 @@ export default function RegisterStore() {
                                             </Label>
                                             <Input
                                                 id="store_email"
+                                                name="store_email"
                                                 type="email"
-                                                value={data.store_email}
-                                                onChange={(e) => setData('store_email', e.target.value)}
-                                                disabled={processing}
+                                                value={formik.values.store_email}
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                disabled={isSubmitting}
                                                 placeholder={t('enter-store-email')}
                                                 className="h-11"
                                             />
-                                            <InputError message={errors.store_email} />
+                                            {formik.touched.store_email && formik.errors.store_email && (
+                                                <InputError message={formik.errors.store_email} />
+                                            )}
                                         </div>
 
                                         <div className="grid gap-2">
@@ -277,14 +330,18 @@ export default function RegisterStore() {
                                             </Label>
                                             <Input
                                                 id="store_phone"
+                                                name="store_phone"
                                                 type="tel"
-                                                value={data.store_phone}
-                                                onChange={(e) => setData('store_phone', e.target.value)}
-                                                disabled={processing}
+                                                value={formik.values.store_phone}
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                disabled={isSubmitting}
                                                 placeholder={t('enter-store-phone')}
                                                 className="h-11"
                                             />
-                                            <InputError message={errors.store_phone} />
+                                            {formik.touched.store_phone && formik.errors.store_phone && (
+                                                <InputError message={formik.errors.store_phone} />
+                                            )}
                                         </div>
 
                                         <div className="grid gap-2">
@@ -293,14 +350,18 @@ export default function RegisterStore() {
                                             </Label>
                                             <Input
                                                 id="store_address"
+                                                name="store_address"
                                                 type="text"
-                                                value={data.store_address}
-                                                onChange={(e) => setData('store_address', e.target.value)}
-                                                disabled={processing}
+                                                value={formik.values.store_address}
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                disabled={isSubmitting}
                                                 placeholder={t('enter-store-address')}
                                                 className="h-11"
                                             />
-                                            <InputError message={errors.store_address} />
+                                            {formik.touched.store_address && formik.errors.store_address && (
+                                                <InputError message={formik.errors.store_address} />
+                                            )}
                                         </div>
 
                                         <div className="grid gap-2">
@@ -309,14 +370,18 @@ export default function RegisterStore() {
                                             </Label>
                                             <textarea
                                                 id="store_description"
-                                                value={data.store_description}
-                                                onChange={(e) => setData('store_description', e.target.value)}
-                                                disabled={processing}
+                                                name="store_description"
+                                                value={formik.values.store_description}
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                disabled={isSubmitting}
                                                 placeholder={t('enter-store-description')}
                                                 className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                                 rows={4}
                                             />
-                                            <InputError message={errors.store_description} />
+                                            {formik.touched.store_description && formik.errors.store_description && (
+                                                <InputError message={formik.errors.store_description} />
+                                            )}
                                         </div>
                                     </div>
                                 )}
@@ -328,7 +393,7 @@ export default function RegisterStore() {
                                             type="button"
                                             variant="outline"
                                             onClick={handlePreviousStep}
-                                            disabled={processing}
+                                            disabled={isSubmitting}
                                             className="flex-1"
                                         >
                                             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -340,7 +405,7 @@ export default function RegisterStore() {
                                         <Button
                                             type="button"
                                             onClick={handleNextStep}
-                                            disabled={processing}
+                                            disabled={isSubmitting}
                                             className="flex-1"
                                         >
                                             {t('next')}
@@ -349,10 +414,10 @@ export default function RegisterStore() {
                                     ) : (
                                         <Button
                                             type="submit"
-                                            disabled={processing}
+                                            disabled={isSubmitting}
                                             className="flex-1"
                                         >
-                                            {processing ? (
+                                            {isSubmitting ? (
                                                 <>
                                                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                                                     {t('submit')}...

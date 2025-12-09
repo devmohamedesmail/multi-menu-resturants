@@ -18,8 +18,30 @@ class Create_Store extends Controller
 {
 
     public function dashboard(){
+
+        $user = Auth::user();
+        $store = Store::where('user_id', $user->id)->first();
         
-        return Inertia::render("store/index", );
+        if($store){
+            $categories = $store->categories()->withCount('meals')->get();
+            $meals = $store->meals()->with('category')->get();
+            
+            $stats = [
+                'totalCategories' => $categories->count(),
+                'totalMeals' => $meals->count(),
+                'totalOrders' => 0,
+                'totalRevenue' => 0,
+            ];
+
+            return Inertia::render("store/index", [
+                'store' => $store,
+                'categories' => $categories,
+                'meals' => $meals,
+                'stats' => $stats,
+            ]);
+        } else{
+            return Inertia::render("store/register-store/index");
+        }
     }
     // index
     public function index(){
@@ -29,8 +51,8 @@ class Create_Store extends Controller
     // register_store
     public function register_store(Request $request)
     {
-      
         try {
+           
             // Validate the request
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
@@ -50,52 +72,22 @@ class Create_Store extends Controller
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
-                'role_id'=>3,
+                'role_id' => 3,
             ]);
 
-            // event(new Registered($user));
+            event(new Registered($user));
 
-            // Handle image upload (required) - Using Cloudinary
-            $imagePath = null;
-            if ($request->hasFile('image')) {
-                $cloudinary = new Cloudinary([
-                    'cloud' => [
-                        'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
-                        'api_key' => env('CLOUDINARY_API_KEY'),
-                        'api_secret' => env('CLOUDINARY_API_SECRET'),
-                    ],
-                ]);
-
-                $uploaded = $cloudinary->uploadApi()->upload($request->file('image')->getRealPath(), [
-                    'folder' => 'stores/logos',
-                    'resource_type' => 'image',
-                ]);
-
-                $imagePath = $uploaded['secure_url'];
-            }
-
-            // Handle banner upload (optional) - Using Cloudinary
+            // Upload images to Cloudinary
+            $imagePath = $this->uploadToCloudinary($request->file('image'), 'stores/logos');
+            
             $bannerPath = null;
             if ($request->hasFile('banner')) {
-                $cloudinary = new \Cloudinary\Cloudinary([
-                    'cloud' => [
-                        'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
-                        'api_key' => env('CLOUDINARY_API_KEY'),
-                        'api_secret' => env('CLOUDINARY_API_SECRET'),
-                    ],
-                ]);
-
-                $uploaded = $cloudinary->uploadApi()->upload($request->file('banner')->getRealPath(), [
-                    'folder' => 'stores/banners',
-                    'resource_type' => 'image',
-                ]);
-
-                $bannerPath = $uploaded['secure_url'];
+                $bannerPath = $this->uploadToCloudinary($request->file('banner'), 'stores/banners');
             }
 
             // Create the store
             $store = Store::create([
-                'owner_id' => $user->id,
+                'user_id' => $user->id,
                 'name' => $validated['store_name'],
                 'email' => $validated['store_email'] ?? null,
                 'phone' => $validated['store_phone'] ?? null,
@@ -108,10 +100,209 @@ class Create_Store extends Controller
             // Log the user in
             Auth::login($user);
 
-            return redirect()->route('home')->with('success', 'Store registered successfully!');
+            return redirect()->route('store.dashboard')->with('success', 'Store registered successfully!');
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Throwable $th) {
-            return back()->withErrors(['error' => 'An error occurred: ' . $th->getMessage()]);
+            \Log::error('Store registration error: ' . $th->getMessage());
+            return back()->withErrors(['error' => $th->getMessage()])->withInput();
         }
+    }
+
+    // Upload file to Cloudinary
+    private function uploadToCloudinary($file, $folder)
+    {
+        try {
+            $cloudinary = new Cloudinary([
+                'cloud' => [
+                    'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                    'api_key' => env('CLOUDINARY_API_KEY'),
+                    'api_secret' => env('CLOUDINARY_API_SECRET'),
+                ],
+            ]);
+
+            $result = $cloudinary->uploadApi()->upload($file->getRealPath(), [
+                'folder' => $folder,
+            ]);
+
+            return $result['secure_url'];
+        } catch (\Exception $e) {
+            \Log::error('Cloudinary upload failed: ' . $e->getMessage());
+            throw new \Exception('Image upload failed');
+        }
+    }
+
+    // Get store data with categories and meals
+    public function getDashboardData()
+    {
+        $user = Auth::user();
+        $store = Store::where('user_id', $user->id)->first();
+        
+        if (!$store) {
+            return redirect()->route('register.store.page');
+        }
+
+        $categories = $store->categories()->withCount('meals')->get();
+        $meals = $store->meals()->with('category')->get();
+        $stats = [
+            'totalCategories' => $categories->count(),
+            'totalMeals' => $meals->count(),
+            'totalOrders' => 0, // You can add order count later
+            'totalRevenue' => 0, // You can add revenue calculation later
+        ];
+
+        return response()->json([
+            'store' => $store,
+            'categories' => $categories,
+            'meals' => $meals,
+            'stats' => $stats,
+        ]);
+    }
+
+    // ============ CATEGORY CRUD ============
+
+    public function storeCategory(Request $request)
+    {
+        $user = Auth::user();
+        $store = Store::where('user_id', $user->id)->first();
+
+        $validated = $request->validate([
+            'name_en' => 'required|string|max:255',
+            'name_ar' => 'required|string|max:255',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'position' => 'nullable|integer',
+        ]);
+
+        $imagePath = $this->uploadToCloudinary($request->file('image'), 'categories');
+
+        $category = $store->categories()->create([
+            'name_en' => $validated['name_en'],
+            'name_ar' => $validated['name_ar'],
+            'image' => $imagePath,
+            'position' => $validated['position'] ?? 0,
+        ]);
+
+        return back()->with('success', 'Category created successfully');
+    }
+
+    public function updateCategory(Request $request, $id)
+    {
+        $user = Auth::user();
+        $store = Store::where('owner_id', $user->id)->first();
+        $category = $store->categories()->findOrFail($id);
+
+        $validated = $request->validate([
+            'name_en' => 'required|string|max:255',
+            'name_ar' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'position' => 'nullable|integer',
+        ]);
+
+        $data = [
+            'name_en' => $validated['name_en'],
+            'name_ar' => $validated['name_ar'],
+            'position' => $validated['position'] ?? $category->position,
+        ];
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $this->uploadToCloudinary($request->file('image'), 'categories');
+        }
+
+        $category->update($data);
+
+        return back()->with('success', 'Category updated successfully');
+    }
+
+    public function deleteCategory($id)
+    {
+        $user = Auth::user();
+        $store = Store::where('owner_id', $user->id)->first();
+        $category = $store->categories()->findOrFail($id);
+        
+        $category->delete();
+
+        return back()->with('success', 'Category deleted successfully');
+    }
+
+    // ============ MEAL CRUD ============
+
+    public function storeMeal(Request $request)
+    {
+        $user = Auth::user();
+        $store = Store::where('user_id', $user->id)->first();
+
+        $validated = $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'name_en' => 'required|string|max:255',
+            'name_ar' => 'required|string|max:255',
+            'description_en' => 'nullable|string',
+            'description_ar' => 'nullable|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'price' => 'required|numeric|min:0',
+            'sale_price' => 'nullable|numeric|min:0',
+        ]);
+
+        $imagePath = $this->uploadToCloudinary($request->file('image'), 'meals');
+
+        $meal = $store->meals()->create([
+            'category_id' => $validated['category_id'],
+            'name_en' => $validated['name_en'],
+            'name_ar' => $validated['name_ar'],
+            'description_en' => $validated['description_en'] ?? null,
+            'description_ar' => $validated['description_ar'] ?? null,
+            'image' => $imagePath,
+            'price' => $validated['price'],
+            'sale_price' => $validated['sale_price'] ?? null,
+        ]);
+
+        return back()->with('success', 'Meal created successfully');
+    }
+
+    public function updateMeal(Request $request, $id)
+    {
+        $user = Auth::user();
+        $store = Store::where('owner_id', $user->id)->first();
+        $meal = $store->meals()->findOrFail($id);
+
+        $validated = $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'name_en' => 'required|string|max:255',
+            'name_ar' => 'required|string|max:255',
+            'description_en' => 'nullable|string',
+            'description_ar' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'price' => 'required|numeric|min:0',
+            'sale_price' => 'nullable|numeric|min:0',
+        ]);
+
+        $data = [
+            'category_id' => $validated['category_id'],
+            'name_en' => $validated['name_en'],
+            'name_ar' => $validated['name_ar'],
+            'description_en' => $validated['description_en'] ?? null,
+            'description_ar' => $validated['description_ar'] ?? null,
+            'price' => $validated['price'],
+            'sale_price' => $validated['sale_price'] ?? null,
+        ];
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $this->uploadToCloudinary($request->file('image'), 'meals');
+        }
+
+        $meal->update($data);
+
+        return back()->with('success', 'Meal updated successfully');
+    }
+
+    public function deleteMeal($id)
+    {
+        $user = Auth::user();
+        $store = Store::where('owner_id', $user->id)->first();
+        $meal = $store->meals()->findOrFail($id);
+        
+        $meal->delete();
+
+        return back()->with('success', 'Meal deleted successfully');
     }
 }

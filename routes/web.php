@@ -111,4 +111,17 @@ Route::controller(Create_Store::class)->group(function(){
     Route::get('/register/store','index')->name('register.store.page');
     Route::post('/register/store','register_store')->name('register.store');
     Route::get('/store/dashboard','dashboard')->name('store.dashboard');
+    
+    // Get dashboard data (categories, meals, stats)
+    Route::get('/store/dashboard/data','getDashboardData')->name('store.dashboard.data');
+    
+    // Category CRUD
+    Route::post('/store/categories','storeCategory')->name('store.category.store');
+    Route::put('/store/categories/{id}','updateCategory')->name('store.category.update');
+    Route::delete('/store/categories/{id}','deleteCategory')->name('store.category.delete');
+    
+    // Meal CRUD
+    Route::post('/store/meals','storeMeal')->name('store.meal.store');
+    Route::put('/store/meals/{id}','updateMeal')->name('store.meal.update');
+    Route::delete('/store/meals/{id}','deleteMeal')->name('store.meal.delete');
 });

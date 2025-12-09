@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
-import { Head } from '@inertiajs/react'
+import { Head, router } from '@inertiajs/react'
 import { useTranslation } from 'react-i18next'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import CategoryDialog from '@/components/store/category-dialog'
+import MealDialog from '@/components/store/meal-dialog'
 import {
     LayoutDashboard,
     UtensilsCrossed,
@@ -12,18 +14,66 @@ import {
     TrendingUp,
     Plus,
     LogOut,
+    Edit,
+    Trash2,
 } from 'lucide-react'
 
-export default function Dashboard() {
-    const { t } = useTranslation()
-    const [activeTab, setActiveTab] = useState('overview')
+interface Category {
+    id: number
+    name_en: string
+    name_ar: string
+    image: string
+    position: number
+    meals_count?: number
+}
 
-    // Mock data - replace with real data from props
-    const stats = {
-        totalCategories: 12,
-        totalMeals: 48,
-        totalOrders: 156,
-        totalRevenue: '$12,450',
+interface Meal {
+    id: number
+    name_en: string
+    name_ar: string
+    description_en?: string
+    description_ar?: string
+    image: string
+    price: number
+    sale_price?: number
+    category: {
+        id: number
+        name_en: string
+        name_ar: string
+    }
+}
+
+interface Props {
+    store: any
+    categories: Category[]
+    meals: Meal[]
+    stats: {
+        totalCategories: number
+        totalMeals: number
+        totalOrders: number
+        totalRevenue: number
+    }
+}
+
+export default function Dashboard({ store, categories = [], meals = [], stats }: Props) {
+    const { t, i18n } = useTranslation()
+    const [activeTab, setActiveTab] = useState('overview')
+    const isArabic = i18n.language === 'ar'
+    const [categoryDialogOpen, setCategoryDialogOpen] = useState(false)
+    const [mealDialogOpen, setMealDialogOpen] = useState(false)
+    const [editingCategory, setEditingCategory] = useState<Category | undefined>()
+    const [editingMeal, setEditingMeal] = useState<Meal | undefined>()
+
+    const handleDeleteCategory = (id: number) => {
+        if (confirm(t('confirm-delete-category'))) {
+            router.delete(route('store.category.delete', id))
+        }
+    }
+
+    const handleDeleteMeal = (id: number) => {
+        if (confirm(t('confirm-delete-meal'))) {
+            router.delete(route('store.meal.delete', id))
+        }
     }
 
     return (
@@ -174,19 +224,67 @@ export default function Dashboard() {
                                         <div>
                                             <CardTitle>{t('manage-categories')}</CardTitle>
                                             <CardDescription>
-                                                Add, edit, or remove categories
+                                                {t('manage-categories-desc')}
                                             </CardDescription>
                                         </div>
-                                        <Button>
+                                        <Button onClick={() => {
+                                            setEditingCategory(undefined)
+                                            setCategoryDialogOpen(true)
+                                        }}>
                                             <Plus className="w-4 h-4 mr-2" />
                                             {t('add-category')}
                                         </Button>
                                     </div>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="text-center py-12 text-gray-500">
-                                        {t('no-categories')}
-                                    </div>
+                                    {categories.length === 0 ? (
+                                        <div className="text-center py-12 text-gray-500">
+                                            {t('no-categories')}
+                                        </div>
+                                    ) : (
+                                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                                            {categories.map((category) => (
+                                                <Card key={category.id}>
+                                                    <CardContent className="p-4">
+                                                        <div className="flex gap-3">
+                                                            <img
+                                                                src={category.image}
+                                                                alt={isArabic ? category.name_ar : category.name_en}
+                                                                className="w-20 h-20 object-cover rounded-lg"
+                                                            />
+                                                            <div className="flex-1">
+                                                                <h3 className="font-semibold text-lg">
+                                                                    {isArabic ? category.name_ar : category.name_en}
+                                                                </h3>
+                                                                <p className="text-sm text-gray-500">
+                                                                    {category.meals_count || 0} {t('meals')}
+                                                                </p>
+                                                                <div className="flex gap-2 mt-3">
+                                                                    <Button
+                                                                        size="sm"
+                                                                        variant="outline"
+                                                                        onClick={() => {
+                                                                            setEditingCategory(category)
+                                                                            setCategoryDialogOpen(true)
+                                                                        }}
+                                                                    >
+                                                                        <Edit className="w-3 h-3" />
+                                                                    </Button>
+                                                                    <Button
+                                                                        size="sm"
+                                                                        variant="destructive"
+                                                                        onClick={() => handleDeleteCategory(category.id)}
+                                                                    >
+                                                                        <Trash2 className="w-3 h-3" />
+                                                                    </Button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </CardContent>
+                                                </Card>
+                                            ))}
+                                        </div>
+                                    )}
                                 </CardContent>
                             </Card>
                         </TabsContent>
@@ -199,25 +297,107 @@ export default function Dashboard() {
                                         <div>
                                             <CardTitle>{t('manage-meals')}</CardTitle>
                                             <CardDescription>
-                                                Add, edit, or remove meals
+                                                {t('manage-meals-desc')}
                                             </CardDescription>
                                         </div>
-                                        <Button>
+                                        <Button onClick={() => {
+                                            setEditingMeal(undefined)
+                                            setMealDialogOpen(true)
+                                        }}>
                                             <Plus className="w-4 h-4 mr-2" />
                                             {t('add-meal')}
                                         </Button>
                                     </div>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="text-center py-12 text-gray-500">
-                                        {t('no-meals')}
-                                    </div>
+                                    {meals.length === 0 ? (
+                                        <div className="text-center py-12 text-gray-500">
+                                            {t('no-meals')}
+                                        </div>
+                                    ) : (
+                                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                                            {meals.map((meal) => (
+                                                <Card key={meal.id}>
+                                                    <CardContent className="p-4">
+                                                        <img
+                                                            src={meal.image}
+                                                            alt={isArabic ? meal.name_ar : meal.name_en}
+                                                            className="w-full h-40 object-cover rounded-lg mb-3"
+                                                        />
+                                                        <h3 className="font-semibold text-lg">
+                                                            {isArabic ? meal.name_ar : meal.name_en}
+                                                        </h3>
+                                                        <p className="text-sm text-gray-500">
+                                                            {isArabic ? meal.category.name_ar : meal.category.name_en}
+                                                        </p>
+                                                        <div className="flex items-center justify-between mt-3">
+                                                            <div>
+                                                                {meal.sale_price ? (
+                                                                    <div className="flex items-center gap-2">
+                                                                        <span className="text-lg font-bold text-green-600">
+                                                                            ${meal.sale_price}
+                                                                        </span>
+                                                                        <span className="text-sm text-gray-400 line-through">
+                                                                            ${meal.price}
+                                                                        </span>
+                                                                    </div>
+                                                                ) : (
+                                                                    <span className="text-lg font-bold">
+                                                                        ${meal.price}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                            <div className="flex gap-2">
+                                                                <Button
+                                                                    size="sm"
+                                                                    variant="outline"
+                                                                    onClick={() => {
+                                                                        setEditingMeal(meal)
+                                                                        setMealDialogOpen(true)
+                                                                    }}
+                                                                >
+                                                                    <Edit className="w-3 h-3" />
+                                                                </Button>
+                                                                <Button
+                                                                    size="sm"
+                                                                    variant="destructive"
+                                                                    onClick={() => handleDeleteMeal(meal.id)}
+                                                                >
+                                                                    <Trash2 className="w-3 h-3" />
+                                                                </Button>
+                                                            </div>
+                                                        </div>
+                                                    </CardContent>
+                                                </Card>
+                                            ))}
+                                        </div>
+                                    )}
                                 </CardContent>
                             </Card>
                         </TabsContent>
                     </Tabs>
                 </main>
             </div>
+
+            {/* Dialogs */}
+            <CategoryDialog
+                open={categoryDialogOpen}
+                onClose={() => {
+                    setCategoryDialogOpen(false)
+                    setEditingCategory(undefined)
+                }}
+                category={editingCategory}
+            />
+
+            <MealDialog
+                open={mealDialogOpen}
+                onClose={() => {
+                    setMealDialogOpen(false)
+                    setEditingMeal(undefined)
+                }}
+                categories={categories}
+                meal={editingMeal}
+            />
         </>
     )
 }
