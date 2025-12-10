@@ -4,6 +4,7 @@ namespace App\Providers;
 use Inertia\Inertia;
 use App\Models\Setting;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // force https in production
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
         // app settings
         Inertia::share('app_settings', function () {
             return Setting::first();
