@@ -1,0 +1,100 @@
+services:
+  - type: web
+    name: multi-menu-restaurant
+    runtime: docker
+    plan: starter
+    region: oregon
+    
+    # Build configuration
+    dockerfilePath: ./dockerfile
+    dockerContext: .
+    
+    # Environment variables
+    envVars:
+      - key: APP_ENV
+        value: production
+      
+      - key: APP_DEBUG
+        value: false
+      
+      - key: APP_KEY
+        generateValue: true
+        
+      - key: APP_URL
+        value: https://multi-menu-restaurant.onrender.com
+      
+      - key: LOG_CHANNEL
+        value: stderr
+      
+      - key: LOG_LEVEL
+        value: info
+      
+      - key: DB_CONNECTION
+        value: pgsql
+      
+      - key: DB_HOST
+        fromDatabase:
+          name: multi-menu-db
+          property: host
+      
+      - key: DB_PORT
+        fromDatabase:
+          name: multi-menu-db
+          property: port
+      
+      - key: DB_DATABASE
+        fromDatabase:
+          name: multi-menu-db
+          property: database
+      
+      - key: DB_USERNAME
+        fromDatabase:
+          name: multi-menu-db
+          property: user
+      
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: multi-menu-db
+          property: password
+      
+      - key: CACHE_DRIVER
+        value: file
+      
+      - key: QUEUE_CONNECTION
+        value: database
+      
+      - key: SESSION_DRIVER
+        value: database
+      
+      - key: SESSION_LIFETIME
+        value: 120
+      
+      - key: BROADCAST_DRIVER
+        value: log
+      
+      # Cloudinary configuration (add your values in Render dashboard)
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      
+      - key: CLOUDINARY_UPLOAD_PRESET
+        sync: false
+    
+    # Health check
+    healthCheckPath: /api/health
+    
+    # Auto-deploy
+    autoDeploy: true
+
+# Database
+databases:
+  - name: multi-menu-db
+    plan: starter
+    databaseName: multi_menu_db
+    user: multi_menu_user
+    region: oregon
