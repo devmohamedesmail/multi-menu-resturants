@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Head, router } from '@inertiajs/react'
+import { Head, Link, router } from '@inertiajs/react'
 import { useTranslation } from 'react-i18next'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -25,6 +25,24 @@ interface Category {
     image: string
     position: number
     meals_count?: number
+}
+
+interface AttributeValue {
+    id: number
+    value_en: string
+    value_ar: string
+    price_modifier: number
+    sort_order: number
+}
+
+interface Attribute {
+    id: number
+    name_en: string
+    name_ar: string
+    type: 'select' | 'radio' | 'checkbox'
+    is_required: boolean
+    sort_order: number
+    values: AttributeValue[]
 }
 
 interface Meal {
@@ -53,9 +71,11 @@ interface Props {
         totalOrders: number
         totalRevenue: number
     }
+    country: any
+    attributes?: Attribute[]
 }
 
-export default function Dashboard({ store, categories = [], meals = [], stats }: Props) {
+export default function Dashboard({ store, categories = [], meals = [], stats, country, attributes = [] }: Props) {
     const { t, i18n } = useTranslation()
     const [activeTab, setActiveTab] = useState('overview')
     const isArabic = i18n.language === 'ar'
@@ -89,23 +109,40 @@ export default function Dashboard({ store, categories = [], meals = [], stats }:
                                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                                     {t('restaurant-dashboard')}
                                 </h1>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                                    {t('my-restaurant')}
-                                </p>
+                                {/* <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                   
+                                    {store.name}
+                                </p> */}
                             </div>
-                            <Button variant="outline" size="sm">
+                            <div>
+
+                                <h3 className='text-primary'>
+                                    {store?.name}
+                                </h3>
+                            </div>
+                           
+                            <Link
+                                href={route('logout')}
+                                method="post"
+                                as="button"
+                                className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-sm flex items-center"
+                            >
                                 <LogOut className="w-4 h-4 mr-2" />
                                 {t('logout')}
-                            </Button>
+                            </Link>
                         </div>
                     </div>
                 </header>
+
+
+
+                <Link href={route('store.home', { store: store?.id, table: 1 })}>home </Link>
 
                 {/* Main Content */}
                 <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
                         {/* Navigation Tabs */}
-                        <TabsList className="grid w-full grid-cols-3 lg:w-auto lg:inline-grid">
+                        <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
                             <TabsTrigger value="overview" className="flex items-center gap-2">
                                 <LayoutDashboard className="w-4 h-4" />
                                 <span className="hidden sm:inline">{t('dashboard')}</span>
@@ -117,6 +154,11 @@ export default function Dashboard({ store, categories = [], meals = [], stats }:
                             <TabsTrigger value="meals" className="flex items-center gap-2">
                                 <UtensilsCrossed className="w-4 h-4" />
                                 <span className="hidden sm:inline">{t('meals')}</span>
+                            </TabsTrigger>
+
+                            <TabsTrigger value="orders" className="flex items-center gap-2">
+                                <UtensilsCrossed className="w-4 h-4" />
+                                <span className="hidden sm:inline">{t('orders')}</span>
                             </TabsTrigger>
                         </TabsList>
 
@@ -335,15 +377,15 @@ export default function Dashboard({ store, categories = [], meals = [], stats }:
                                                                 {meal.sale_price ? (
                                                                     <div className="flex items-center gap-2">
                                                                         <span className="text-lg font-bold text-green-600">
-                                                                            ${meal.sale_price}
+                                                                            {i18n.language === 'ar' ? country.currency_ar : country.currency_en} {meal.sale_price}
                                                                         </span>
                                                                         <span className="text-sm text-gray-400 line-through">
-                                                                            ${meal.price}
+                                                                            {i18n.language === 'ar' ? country.currency_ar : country.currency_en} {meal.price}
                                                                         </span>
                                                                     </div>
                                                                 ) : (
                                                                     <span className="text-lg font-bold">
-                                                                        ${meal.price}
+                                                                        {i18n.language === 'ar' ? country.currency_ar : country.currency_en} {meal.price}
                                                                     </span>
                                                                 )}
                                                             </div>
@@ -375,6 +417,29 @@ export default function Dashboard({ store, categories = [], meals = [], stats }:
                                 </CardContent>
                             </Card>
                         </TabsContent>
+
+                        <TabsContent value="orders">
+                            <Card>
+                                <CardHeader>
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <CardTitle>{t('manage-meals')}</CardTitle>
+                                            <CardDescription>
+                                                {t('manage-meals-desc')}
+                                            </CardDescription>
+                                        </div>
+                                        <Button onClick={() => {
+                                            setEditingMeal(undefined)
+                                            setMealDialogOpen(true)
+                                        }}>
+                                            <Plus className="w-4 h-4 mr-2" />
+                                            {t('add-meal')}
+                                        </Button>
+                                    </div>
+                                </CardHeader>
+
+                            </Card>
+                        </TabsContent>
                     </Tabs>
                 </main>
             </div>
@@ -396,6 +461,7 @@ export default function Dashboard({ store, categories = [], meals = [], stats }:
                     setEditingMeal(undefined)
                 }}
                 categories={categories}
+                attributes={attributes}
                 meal={editingMeal}
             />
         </>

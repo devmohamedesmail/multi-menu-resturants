@@ -9,28 +9,36 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import InputError from '@/components/input-error'
 import ImageUpload from '@/components/image-upload'
-import { CheckCircle2, Store, User, ArrowRight, ArrowLeft } from 'lucide-react'
+import { CheckCircle2, Store, User, ArrowRight, ArrowLeft, Languages } from 'lucide-react'
 import LanguageSwitcher from '@/components/front/LanguageSwitcher'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
 
-export default function RegisterStore() {
-    const { t } = useTranslation()
+export default function RegisterStore({ countries }: any) {
+    const { t, i18n } = useTranslation()
     const [currentStep, setCurrentStep] = useState(1)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const totalSteps = 2
 
     const validationSchema = Yup.object({
-        name: Yup.string().required('Name is required'),
-        email: Yup.string().email('Invalid email').required('Email is required'),
-        password: Yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
+        name: Yup.string().required(t('store.full-name-required')),
+        email: Yup.string().email(t('store.invalid-email')).required(t('store.email-required')),
+        password: Yup.string().min(8, t('store.password-min')).required(t('store.password-required')),
         password_confirmation: Yup.string()
-            .oneOf([Yup.ref('password')], 'Passwords must match')
-            .required('Confirm password is required'),
-        store_name: Yup.string().required('Store name is required'),
-        store_email: Yup.string().email('Invalid email').nullable(),
+            .oneOf([Yup.ref('password')], t('store.passwords-must-match'))
+            .required(t('store.confirm-password-required')),
+        store_name: Yup.string().required(t('store.store-name-required')),
+        country_id: Yup.string().required(t('store.country-required')),
+        store_email: Yup.string().email(t('store.invalid-email')).nullable(),
         store_phone: Yup.string().nullable(),
         store_address: Yup.string().nullable(),
         store_description: Yup.string().nullable(),
-        image: Yup.mixed().required('Store logo is required'),
+        image: Yup.mixed().required(t('store.store-logo-required')),
         banner: Yup.mixed().nullable(),
     })
 
@@ -40,7 +48,9 @@ export default function RegisterStore() {
             email: '',
             password: '',
             password_confirmation: '',
+            country_id: '',
             store_name: '',
+            slug: '',
             store_email: '',
             store_phone: '',
             store_address: '',
@@ -57,7 +67,9 @@ export default function RegisterStore() {
             formData.append('email', values.email)
             formData.append('password', values.password)
             formData.append('password_confirmation', values.password_confirmation)
+            formData.append('country_id', values.country_id)
             formData.append('store_name', values.store_name)
+            formData.append('slug', values.slug)
             if (values.store_email) formData.append('store_email', values.store_email)
             if (values.store_phone) formData.append('store_phone', values.store_phone)
             if (values.store_address) formData.append('store_address', values.store_address)
@@ -68,7 +80,7 @@ export default function RegisterStore() {
             try {
                 await router.post(route('register.store'), formData, {
                     onSuccess: () => {
-                        router.visit('/')
+                        router.visit('/store/dashboard')
                     },
                     onError: (errors) => {
                         setIsSubmitting(false)
@@ -109,7 +121,7 @@ export default function RegisterStore() {
     return (
         <>
             <Head title={t('register-store')} />
-            <LanguageSwitcher />
+
             <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
                 <div className="w-full max-w-2xl">
                     {/* Header */}
@@ -133,8 +145,8 @@ export default function RegisterStore() {
                                     <div className="flex flex-col items-center flex-1">
                                         <div
                                             className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all ${currentStep >= step
-                                                    ? 'bg-primary text-white'
-                                                    : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                                                ? 'bg-primary text-white'
+                                                : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
                                                 }`}
                                         >
                                             {currentStep > step ? (
@@ -150,8 +162,8 @@ export default function RegisterStore() {
                                     {step < totalSteps && (
                                         <div
                                             className={`flex-1 h-1 mx-2 transition-all ${currentStep > step
-                                                    ? 'bg-primary'
-                                                    : 'bg-gray-200 dark:bg-gray-700'
+                                                ? 'bg-primary'
+                                                : 'bg-gray-200 dark:bg-gray-700'
                                                 }`}
                                         />
                                     )}
@@ -264,6 +276,8 @@ export default function RegisterStore() {
                                 {/* Step 2: Store Information */}
                                 {currentStep === 2 && (
                                     <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+                                      
+                                    <h2>{formik.values.slug}</h2>
                                         <div className="grid gap-2">
                                             <Label htmlFor="store_name">{t('store-name')}</Label>
                                             <Input
@@ -272,7 +286,18 @@ export default function RegisterStore() {
                                                 type="text"
                                                 autoFocus
                                                 value={formik.values.store_name}
-                                                onChange={formik.handleChange}
+                                                onChange={(e) => {
+                                                    formik.handleChange(e);
+
+                                                    const value = e.target.value;
+                                                    const slug = value
+                                                        .trim()
+                                                        .toLowerCase()
+                                                        .replace(/[^a-z0-9]+/g, '-')
+                                                        .replace(/^-+|-+$/g, '');
+
+                                                    formik.setFieldValue('slug', slug);
+                                                }}
                                                 onBlur={formik.handleBlur}
                                                 disabled={isSubmitting}
                                                 placeholder={t('enter-store-name')}
@@ -383,6 +408,33 @@ export default function RegisterStore() {
                                                 <InputError message={formik.errors.store_description} />
                                             )}
                                         </div>
+
+                                        <div className="grid gap-2">
+                                            <Label>{t('store.choose-country')}</Label>
+
+                                            <Select
+                                                value={formik.values.country_id}
+                                                onValueChange={(value) => formik.setFieldValue('country_id', value)}
+                                            >
+                                                <SelectTrigger className="w-full h-11">
+                                                    <Languages className="w-4 h-4 mr-2" />
+                                                    <SelectValue placeholder={t('store.choose-country')} />
+                                                </SelectTrigger>
+
+                                                <SelectContent>
+                                                    {countries && countries.map((country: any) => (
+                                                        <SelectItem key={country.id} value={String(country.id)}>
+                                                            {i18n.language === 'ar' ? country.name_ar : country.name_en}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+
+                                            {formik.touched.country_id && formik.errors.country_id && (
+                                                <InputError message={formik.errors.country_id} />
+                                            )}
+                                        </div>
+
                                     </div>
                                 )}
 

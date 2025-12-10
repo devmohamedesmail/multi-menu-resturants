@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\Category_controller;
+use App\Http\Controllers\admin\CountryController;
 use App\Http\Controllers\admin\Meal_controller;
 use App\Http\Controllers\admin\Order_controller;
 use App\Http\Controllers\admin\Setting_controller;
@@ -23,6 +24,15 @@ use Inertia\Inertia;
 Route::controller(Setting_controller::class)->group(function(){
     Route::get('/admin/settings', 'settings')->name('settings');
     Route::post('/admin/settings/update', 'update_settings')->name('update.settings');
+});
+
+
+Route::controller(CountryController::class)->group(function(){
+    Route::get('/admin/countries', 'index')->name('countries.page');
+    Route::post('/admin/store/country', 'store')->name('country.store');
+    Route::get('/admin/edit/country/{id}','edit')->name('country.edit');
+    Route::post('/admin/update/country/{id}','update')->name('country.update');
+    Route::get('/admin/delete/country/{id}','delete')->name('country.delete');
 });
 
 
@@ -108,6 +118,7 @@ Route::controller(User_front_controller::class)->group(function(){
 
 // =============== create store ======================
 Route::controller(Create_Store::class)->group(function(){
+    Route::get('/store/home/{store?}/{table?}','store_home')->name('store.home');
     Route::get('/register/store','index')->name('register.store.page');
     Route::post('/register/store','register_store')->name('register.store');
     Route::get('/store/dashboard','dashboard')->name('store.dashboard');

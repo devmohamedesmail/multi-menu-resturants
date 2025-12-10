@@ -23,17 +23,17 @@ export default function Setting({ setting }: any) {
     const { t } = useTranslation();
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const { data, setData, post, processing, errors, reset } = useForm({
-        title_en: setting.title_en || '',
-        title_ar: setting.title_ar || '',
+        title_en: setting?.title_en || '',
+        title_ar: setting?.title_ar || '',
         logo: '',
         favicon: '',
-        email: setting.email || '',
-        phone: setting.phone || '',
-        address: setting.address || '',
-        description_en: setting.description_en || '',
-        description_ar: setting.description_ar || '',
-        currency_en: setting.currency_en || '',
-        currency_ar: setting.currency_ar || '',
+        email: setting?.email || '',
+        phone: setting?.phone || '',
+        address: setting?.address || '',
+        description_en: setting?.description_en || '',
+        description_ar: setting?.description_ar || '',
+        currency_en: setting?.currency_en || '',
+        currency_ar: setting?.currency_ar || '',
     });
 
     const update_setting = (e: any) => {

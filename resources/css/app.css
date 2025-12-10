@@ -1,6 +1,11 @@
 @import 'tailwindcss';
 @plugin "daisyui";
 
+/* Swiper Carousel Styles */
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+
 @plugin "daisyui" {
     themes: light --default, dark --prefersdark, halloween;
 }
@@ -174,4 +179,59 @@
 }
 html{
     background: #000;
+}
+
+/* Hide scrollbar while keeping functionality */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* Swiper Custom Styles */
+.categories-swiper .swiper-button-next,
+.categories-swiper .swiper-button-prev {
+    background: linear-gradient(to right, #f97316, #ef4444);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.categories-swiper .swiper-button-next:after,
+.categories-swiper .swiper-button-prev:after {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.categories-swiper .swiper-button-next:hover,
+.categories-swiper .swiper-button-prev:hover {
+    background: linear-gradient(to right, #ea580c, #dc2626);
+    transform: scale(1.1);
+    transition: all 0.3s ease;
+}
+
+.categories-swiper .swiper-pagination-bullet {
+    background: rgba(249, 115, 22, 0.5);
+    width: 10px;
+    height: 10px;
+}
+
+.categories-swiper .swiper-pagination-bullet-active {
+    background: linear-gradient(to right, #f97316, #ef4444);
+    width: 24px;
+    border-radius: 5px;
+}
+
+.categories-swiper .swiper-slide {
+    height: auto;
+    display: flex;
+    align-items: stretch;
+}
+
+.categories-swiper .swiper-slide button {
+    min-height: 100%;
 }

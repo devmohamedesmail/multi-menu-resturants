@@ -3,6 +3,7 @@ import { Upload, X, Image as ImageIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
+import { useTranslation } from 'react-i18next'
 
 interface ImageUploadProps {
     label: string
@@ -30,6 +31,7 @@ export default function ImageUpload({
     const [preview, setPreview] = useState<string | null>(null)
     const [isDragging, setIsDragging] = useState(false)
     const fileInputRef = useRef<HTMLInputElement>(null)
+    const { t } = useTranslation()
 
     const handleFileChange = (file: File | null) => {
         if (file && file.type.startsWith('image/')) {
@@ -142,7 +144,7 @@ export default function ImageUpload({
                                 disabled={disabled}
                             >
                                 <Upload className="w-4 h-4 mr-2" />
-                                Change
+                                {t('common.change')}
                             </Button>
                             <Button
                                 type="button"
@@ -155,7 +157,7 @@ export default function ImageUpload({
                                 disabled={disabled}
                             >
                                 <X className="w-4 h-4 mr-2" />
-                                Remove
+                                {t('common.remove')}
                             </Button>
                         </div>
                     </div>
@@ -166,11 +168,12 @@ export default function ImageUpload({
                         </div>
                         <div className="mb-2">
                             <span className="text-sm font-medium text-gray-900 dark:text-white">
-                                Click to upload or drag and drop
+                                
+                                {t('common.upload-image')}
                             </span>
                         </div>
                         <p className="text-xs text-gray-500 dark:text-gray-400">
-                            PNG, JPG, GIF up to 2MB
+                            {t('common.file-size-limit')}
                         </p>
                         <Button
                             type="button"
@@ -184,7 +187,7 @@ export default function ImageUpload({
                             }}
                         >
                             <Upload className="w-4 h-4 mr-2" />
-                            Choose File
+                            {t('common.choose-file')}
                         </Button>
                     </div>
                 )}

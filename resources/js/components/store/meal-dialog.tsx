@@ -18,6 +18,27 @@ interface Category {
     name_ar: string
 }
 
+interface AttributeValue {
+    id: number
+    value_en: string
+    value_ar: string
+    price_modifier: number
+}
+
+interface Attribute {
+    id: number
+    name_en: string
+    name_ar: string
+    type: 'select' | 'radio' | 'checkbox'
+    is_required: boolean
+    values: AttributeValue[]
+}
+
+interface MealAttribute {
+    attribute_id: number
+    attribute_value_id: number
+}
+
 interface Meal {
     id?: number
     name_en: string
@@ -30,18 +51,29 @@ interface Meal {
     category: {
         id: number
     }
+    attributes?: MealAttribute[]
 }
 
 interface Props {
     open: boolean
     onClose: () => void
     categories: Category[]
+    attributes?: Attribute[]
     meal?: Meal
 }
 
-export default function MealDialog({ open, onClose, categories, meal }: Props) {
-    const { t } = useTranslation()
+export default function MealDialog({ open, onClose, categories, attributes = [], meal }: Props) {
+    
+    
+    const { t, i18n } = useTranslation()
+    const isArabic = i18n.language === 'ar'
     const [imageFile, setImageFile] = useState<File | null>(null)
+    const [selectedAttributes, setSelectedAttributes] = useState<Record<number, number>>(
+        meal?.attributes?.reduce((acc, attr) => {
+            acc[attr.attribute_id] = attr.attribute_value_id
+            return acc
+        }, {} as Record<number, number>) || {}
+    )
 
     const validationSchema = Yup.object({
         category_id: Yup.number().required(t('required-field')),
@@ -77,6 +109,9 @@ export default function MealDialog({ open, onClose, categories, meal }: Props) {
                 formData.append('sale_price', values.sale_price.toString())
             }
             
+            // Add attributes
+            formData.append('attributes', JSON.stringify(selectedAttributes))
+            
             if (imageFile) {
                 formData.append('image', imageFile)
             } else if (!meal) {
@@ -91,6 +126,7 @@ export default function MealDialog({ open, onClose, categories, meal }: Props) {
                         onClose()
                         formik.resetForm()
                         setImageFile(null)
+                        setSelectedAttributes({})
                     },
                     onError: (errors) => {
                         formik.setErrors(errors)
@@ -102,6 +138,7 @@ export default function MealDialog({ open, onClose, categories, meal }: Props) {
                         onClose()
                         formik.resetForm()
                         setImageFile(null)
+                        setSelectedAttributes({})
                     },
                     onError: (errors) => {
                         formik.setErrors(errors)
@@ -249,6 +286,50 @@ export default function MealDialog({ open, onClose, categories, meal }: Props) {
                             )}
                         </div>
                     </div>
+
+                    {/* Attributes Section */}
+                    {attributes.length > 0 && (
+                        <div className="space-y-4 border-t pt-4">
+                            <h3 className="text-lg font-semibold">{t('meal-attributes')}</h3>
+                            
+                            {attributes.map((attribute) => (
+                                <div key={attribute.id} className="space-y-2">
+                                    <Label htmlFor={`attribute-${attribute.id}`}>
+                                        {isArabic ? attribute.name_ar : attribute.name_en}
+                                        {attribute.is_required && <span className="text-red-500 ml-1">*</span>}
+                                    </Label>
+
+                                     <Select
+                                            value={selectedAttributes[attribute.id]?.toString() || ''}
+                                            onValueChange={(value) => 
+                                                setSelectedAttributes(prev => ({
+                                                    ...prev,
+                                                    [attribute.id]: parseInt(value)
+                                                }))
+                                            }
+                                        >
+                                            <SelectTrigger>
+                                                <SelectValue placeholder={t('select-option')} />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {attribute.values.map((value) => (
+                                                    <SelectItem key={value.id} value={value.id.toString()}>
+                                                        {isArabic ? value.value_ar : value.value_en}
+                                                        {value.price_modifier !== 0 && (
+                                                            <span className="text-orange-500 ml-2">
+                                                                ({value.price_modifier > 0 ? '+' : ''}{value.price_modifier})
+                                                            </span>
+                                                        )}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    
+                                   
+                                </div>
+                            ))}
+                        </div>
+                    )}
 
                     {/* Image Upload */}
                     <div className="space-y-2">

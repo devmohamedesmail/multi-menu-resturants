@@ -50,6 +50,11 @@ export function AppSidebar() {
             href: '/admin/users',
             icon: CircleDashed,
         },
+        {
+            title: t('countries'),
+            href: '/admin/countries',
+            icon: CircleDashed,
+        },
     ];
     
     const footerNavItems: NavItem[] = [

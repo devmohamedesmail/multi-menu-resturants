@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->enum('role', ['user', 'admin' , 'manager', 'store_owner'])->default('user');
             $table->longText('avatar')->nullable();
-            $table->foreignId('role_id')->default(1)->constrained('roles');
+            $table->enum('role' , ['user','admin','manager','store_owner'])->default('user');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('phone')->nullable();

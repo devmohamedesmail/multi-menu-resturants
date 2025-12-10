@@ -2,29 +2,53 @@
 
 namespace App\Http\Controllers\user;
 
-use App\Http\Controllers\Controller;
+use App\Models\Attribute;
 use App\Models\User;
+use Inertia\Inertia;
 use App\Models\Store;
+use App\Models\Country;
+use App\Models\Category;
+use Cloudinary\Cloudinary;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rules;
 use Illuminate\Auth\Events\Registered;
-use Inertia\Inertia;
-use Cloudinary\Cloudinary;
 
 class Create_Store extends Controller
 {
 
+    // store_home
+    public function store_home($store = null, $table = null){
+        try {
+          
+            $store = Store::with([
+                'categories' => function($query) {
+                    $query->withCount('meals');
+                },
+                'meals.category',
+                'country'
+            ])->findOrFail($store);
+            
+            return Inertia::render('store/home', [
+                'store' => $store,
+                'table' => $table,
+            ]);
+        } catch (\Throwable $th) {
+            return redirect()->route('home')->with('error', 'Store not found');
+        }
+    }
     public function dashboard(){
 
         $user = Auth::user();
-        $store = Store::where('user_id', $user->id)->first();
-        
+        $store = Store::where('user_id', $user->id)->first(); 
         if($store){
             $categories = $store->categories()->withCount('meals')->get();
             $meals = $store->meals()->with('category')->get();
+            $country = $store->country()->first();
+            $attributes = Attribute::with('values')->orderBy('sort_order')->get();
             
             $stats = [
                 'totalCategories' => $categories->count(),
@@ -36,8 +60,10 @@ class Create_Store extends Controller
             return Inertia::render("store/index", [
                 'store' => $store,
                 'categories' => $categories,
+                'country' => $country,
                 'meals' => $meals,
                 'stats' => $stats,
+                'attributes' => $attributes,
             ]);
         } else{
             return Inertia::render("store/register-store/index");
@@ -45,20 +71,28 @@ class Create_Store extends Controller
     }
     // index
     public function index(){
-        return Inertia::render("store/register-store/index");
+       try {
+         $countries = Country::all();
+        return Inertia::render("store/register-store/index", [
+            'countries' => $countries,
+        ]);
+       } catch (\Throwable $th) {
+        //throw $th;
+       }
     }
 
     // register_store
     public function register_store(Request $request)
     {
         try {
-           
+          
             // Validate the request
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
                 'store_name' => 'required|string|max:255|unique:stores,name',
+                'country_id' => 'nullable',
                 'store_email' => 'nullable|email|max:255',
                 'store_phone' => 'nullable|string|max:50',
                 'store_address' => 'nullable|string|max:500',
@@ -72,7 +106,7 @@ class Create_Store extends Controller
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
-                'role_id' => 3,
+                 "role" => "store_owner",
             ]);
 
             event(new Registered($user));
@@ -88,6 +122,7 @@ class Create_Store extends Controller
             // Create the store
             $store = Store::create([
                 'user_id' => $user->id,
+                'country_id' => $validated['country_id'] ?? null,
                 'name' => $validated['store_name'],
                 'email' => $validated['store_email'] ?? null,
                 'phone' => $validated['store_phone'] ?? null,
@@ -217,7 +252,7 @@ class Create_Store extends Controller
     public function deleteCategory($id)
     {
         $user = Auth::user();
-        $store = Store::where('owner_id', $user->id)->first();
+        $store = Store::where('user_id', $user->id)->first();
         $category = $store->categories()->findOrFail($id);
         
         $category->delete();
@@ -256,6 +291,18 @@ class Create_Store extends Controller
             'sale_price' => $validated['sale_price'] ?? null,
         ]);
 
+        // Handle attributes
+        if ($request->has('attributes')) {
+            $attributes = json_decode($request->input('attributes'), true);
+            if (is_array($attributes)) {
+                foreach ($attributes as $attributeId => $valueId) {
+                    $meal->attributes()->attach($attributeId, [
+                        'attribute_value_id' => $valueId
+                    ]);
+                }
+            }
+        }
+
         return back()->with('success', 'Meal created successfully');
     }
 
@@ -291,6 +338,18 @@ class Create_Store extends Controller
         }
 
         $meal->update($data);
+
+        // Handle attributes
+        if ($request->has('attributes')) {
+            $attributes = json_decode($request->input('attributes'), true);
+            if (is_array($attributes)) {
+                $syncData = [];
+                foreach ($attributes as $attributeId => $valueId) {
+                    $syncData[$attributeId] = ['attribute_value_id' => $valueId];
+                }
+                $meal->attributes()->sync($syncData);
+            }
+        }
 
         return back()->with('success', 'Meal updated successfully');
     }

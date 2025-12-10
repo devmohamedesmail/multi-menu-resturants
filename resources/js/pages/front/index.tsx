@@ -25,6 +25,7 @@ import {
     Check,
 } from 'lucide-react'
 import { usePage } from '@inertiajs/react'
+import LanguageSelect from '@/components/ui/language-select'
 
 type Props = {
     categories?: { id: number; name_en: string; image: string }[]
@@ -35,10 +36,10 @@ type Props = {
 export default function LandingPage({ categories, meals, table }: Props) {
     const { t, i18n } = useTranslation()
     const isArabic = i18n.language === 'ar'
-    const { app_settings } = usePage().props
-    const { auth } = usePage().props
+    const { app_settings }:any = usePage().props
+    const { auth }:any = usePage().props
 
-console.log('auth user:', auth?.user);
+
 
     const changeLanguage = (lang: string) => {
         i18n.changeLanguage(lang)
@@ -98,29 +99,15 @@ console.log('auth user:', auth?.user);
                             <div className="flex items-center gap-2">
                                 <ChefHat className="w-8 h-8 text-orange-500" />
                                 <span className="text-xl font-bold text-gray-900 dark:text-white">
-                                    {t('menu-master')}
+                                    {i18n.language === 'ar' ?  app_settings?.title_ar : app_settings?.title_en}
                                 </span>
                             </div>
 
                             <div className="flex items-center gap-4">
-                                {/* Language Selector */}
-                                <Select value={i18n.language} onValueChange={changeLanguage}>
-                                    <SelectTrigger className="w-[140px]">
-                                        <Languages className="w-4 h-4 mr-2" />
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="en">English</SelectItem>
-                                        <SelectItem value="ar">العربية</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                         
+                               <LanguageSelect />
 
-                                {/* <Link href={route('login')}>
-                                    <Button variant="ghost">{t('login')}</Button>
-                                </Link>
-                                <Link href={route('register')}>
-                                    <Button>{t('get-started')}</Button>
-                                </Link> */}
+                               
 
 
                                 {auth && auth.user ? (
@@ -129,13 +116,16 @@ console.log('auth user:', auth?.user);
                                             {t('dashboard')}
                                         </button>
 
-                                        <ul className="dropdown bg-white menu w-52 rounded-box bg-base-100 shadow-sm"
+                                        <ul className="dropdown  menu w-52 rounded-box bg-white shadow-sm"
                                             popover="auto" id="popover-1" >
 
-                                            <p>{auth?.user?.name}</p>
+                                            <p className='px-3 py-2'>{auth?.user?.name}</p>
+                                        
 
-                                            {auth?.user?.role_id === 3 ? (<li> <Link href=''>Dashorad</Link></li>) : null}
-                                            {auth?.user?.role_id === 2 ? (<li> <Link href=''>Dashorad</Link></li>) : null}
+                                            {auth?.user?.role === 'store_owner' ? (<li> <Link href={route('store.dashboard')}>{t('store.dashboard')}</Link></li>) : null}
+                                            {auth?.user?.role === 'manager' ? (<li> <Link href=''>Dashorad</Link></li>) : null}
+                                            {auth?.user?.role === 'user' ? (<li> <Link href=''>Dashorad</Link></li>) : null}
+                                            {auth?.user?.role === 'admin' ? (<li> <Link href='/dashboard'>{t('dashboard')}</Link></li>) : null}
                                             <li>
                                                 <Link
                                                     href={route('logout')}
@@ -143,7 +133,7 @@ console.log('auth user:', auth?.user);
                                                     as="button"
                                                     className="w-full text-left"
                                                 >
-                                                    Logout
+                                                    {t('logout')}
                                                 </Link>
                                             </li>
                                         </ul>
@@ -180,7 +170,7 @@ console.log('auth user:', auth?.user);
                                     {t('landing-hero-description')}
                                 </p>
                                 <div className="flex flex-wrap gap-4">
-                                    <Link href={route('register')}>
+                                    <Link href={route('register.store.page')}>
                                         <Button size="lg" className="text-lg px-8">
                                             {t('start-free-trial')}
                                             <ArrowRight className="w-5 h-5 ml-2" />
@@ -207,6 +197,7 @@ console.log('auth user:', auth?.user);
                         </div>
                     </div>
                 </section>
+                
 
                 {/* Features Section */}
                 <section className="py-20 bg-white dark:bg-gray-900">

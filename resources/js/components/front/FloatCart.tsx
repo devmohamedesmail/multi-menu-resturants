@@ -8,6 +8,7 @@ import { FiMinus } from "react-icons/fi";
 import { useDispatch } from 'react-redux';
 import { Link, router, usePage } from '@inertiajs/react';
 import { decrease_quantity, increase_quantity, remove_from_cart } from '@/reducers/cartSlice';
+import CartItem from '../store/cart-item';
 
 
 type Props = {
@@ -23,19 +24,6 @@ function FloatCart({ table }: Props) {
     const [tableNo, setTableNo] = useState(table)
     const { app_settings }: any = usePage().props;
 
-    const handleIncreaseQuantity = (id: number) => {
-        dispatch(increase_quantity(id))
-    }
-
-
-    const handleDecreaseQuantity = (id: number) => {
-        dispatch(decrease_quantity(id))
-    }
-
-
-    const handleDeleteitem = (id: number) => {
-        dispatch(remove_from_cart(id))
-    }
 
     const total = cart.reduce((acc: number, item: any) => {
         return acc + item.price * item.quantity;
@@ -63,7 +51,6 @@ function FloatCart({ table }: Props) {
 
     return (
         <div>
-
             <div className="drawer drawer-end">
                 <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
                 <div className="drawer-content">
@@ -78,35 +65,7 @@ function FloatCart({ table }: Props) {
                         {cart && cart.length > 0 ? (
                             <>
                                 {cart.map((item: any) => (
-                                    <div key={item.id} className='mb-3 flex items-center'>
-                                        <div>
-                                            <img src={`/uploads/${item.image}`} className='w-16 h-16' alt={item.name_ar} />
-                                        </div>
-                                        <div className='flex-1  mx-1'>
-                                            <h5 className='text-white'>
-                                                {i18n.language === 'ar' ? item.name_ar : item.name_en}
-                                            </h5>
-                                            <div className='text-primary flex'>
-
-                                                <p className='mx-1'> {item.price}</p>
-                                                {app_settings ?  <p className='mx-1'>{i18n.language === 'ar' ? app_settings.currency_ar : app_settings.currency_en}</p> : ''}
-                                               
-
-                                            </div>
-                                            <div className='flex mt-2 '>
-                                                <button onClick={() => handleIncreaseQuantity(item.id)} className='bg-primary w-6 h-6 rounded-xl flex justify-center items-center'>
-                                                    <FaPlus />
-                                                </button>
-                                                <input type="text" className='w-10 text-center' readOnly value={item.quantity} />
-                                                <button onClick={() => handleDecreaseQuantity(item.id)} className='bg-primary w-6 h-6 rounded-xl flex justify-center items-center'>
-                                                    <FiMinus />
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div className='flex justify-center items-center mr-3'>
-                                            <button onClick={() => handleDeleteitem(item.id)} className='bg-red-600 w-10 h-10 flex justify-center items-center rounded-xl'><FaTrash /></button>
-                                        </div>
-                                    </div>
+                                    <CartItem key={item.id} item={item} />
                                 ))}
 
                                 <div className='bottom-10 right-10 left-10 absolute'>

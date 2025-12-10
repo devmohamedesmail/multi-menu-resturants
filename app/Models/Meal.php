@@ -34,6 +34,23 @@ class Meal extends Model
         return $this->belongsTo(Store::class);
     }
 
+    /**
+     * Get the attributes for this meal
+     */
+    public function attributes()
+    {
+        return $this->belongsToMany(Attribute::class, 'meal_attributes')
+            ->withPivot('attribute_value_id')
+            ->withTimestamps();
+    }
 
-    
+    /**
+     * Get the attribute values for this meal
+     */
+    public function attributeValues()
+    {
+        return $this->belongsToMany(AttributeValue::class, 'meal_attributes', 'meal_id', 'attribute_value_id')
+            ->withPivot('attribute_id')
+            ->withTimestamps();
+    }
 }
