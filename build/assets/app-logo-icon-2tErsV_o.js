@@ -1,1 +1,0 @@
-import{K as t,j as o}from"./app-BUS-dX_O.js";function l(p){const{app_settings:s}=t().props;return o.jsxs("div",{children:[s&&s.logo?o.jsx("img",{className:"w-full ",src:`/uploads/${s.logo}`,alt:""}):"",o.jsx("h4",{children:s&&s.title_en?s.title_ar:""})]})}export{l as A};

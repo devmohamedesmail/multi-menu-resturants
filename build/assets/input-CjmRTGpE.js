@@ -1,1 +1,0 @@
-import{j as s}from"./app-BUS-dX_O.js";import{u as a}from"./useTranslation-CeuNbFpE.js";function p({className:t,type:r,...o}){const{t:e,i18n:n}=a();return s.jsx("input",{type:r,"data-slot":"input",className:`h-12 block w-full px-2 border border-gray-400  text-sm focus:outline-none focus:border-primary ${n.language==="ar"?"text-right":""} ${t}`,...o})}export{p as I};
