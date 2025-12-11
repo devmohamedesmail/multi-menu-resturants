@@ -38,8 +38,18 @@ export default function RegisterStore({ countries }: any) {
         store_phone: Yup.string().nullable(),
         store_address: Yup.string().nullable(),
         store_description: Yup.string().nullable(),
-        image: Yup.mixed().required(t('store.store-logo-required')),
-        banner: Yup.mixed().nullable(),
+        image: Yup.mixed()
+            .required(t('store.store-logo-required'))
+            .test('fileSize', t('store.file-size-limit'), (value) => {
+                if (!value) return true
+                return value instanceof File && value.size <= 2 * 1024 * 1024 // 2MB
+            }),
+        banner: Yup.mixed()
+            .nullable()
+            .test('fileSize', t('store.file-size-limit'), (value) => {
+                if (!value) return true
+                return value instanceof File && value.size <= 2 * 1024 * 1024 // 2MB
+            }),
     })
 
     const formik = useFormik({
@@ -277,7 +287,7 @@ export default function RegisterStore({ countries }: any) {
                                 {currentStep === 2 && (
                                     <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
                                       
-                                    <h2>{formik.values.slug}</h2>
+                                  
                                         <div className="grid gap-2">
                                             <Label htmlFor="store_name">{t('store-name')}</Label>
                                             <Input

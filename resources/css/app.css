@@ -15,7 +15,7 @@
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 
-@custom-variant dark (&:is(.dark *));
+/* @custom-variant dark (&:is(.dark *)); */
 
 @theme {
     --font-sans:
@@ -169,7 +169,12 @@
     }
 }
 
-
+@theme{
+    --color-main: #f54a00;
+    --color-primary-foreground: #ffffff;
+    --color-second: #F52200;
+    --color-secondary-foreground: #ffffff;
+}
 
 .arabic-font{
     font-family: "Cairo", sans-serif;

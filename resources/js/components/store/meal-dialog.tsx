@@ -63,11 +63,12 @@ interface Props {
 }
 
 export default function MealDialog({ open, onClose, categories, attributes = [], meal }: Props) {
-    
-    
+
+
     const { t, i18n } = useTranslation()
     const isArabic = i18n.language === 'ar'
     const [imageFile, setImageFile] = useState<File | null>(null)
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const [selectedAttributes, setSelectedAttributes] = useState<Record<number, number>>(
         meal?.attributes?.reduce((acc, attr) => {
             acc[attr.attribute_id] = attr.attribute_value_id
@@ -98,6 +99,7 @@ export default function MealDialog({ open, onClose, categories, attributes = [],
         enableReinitialize: true,
         validationSchema,
         onSubmit: async (values) => {
+            setIsSubmitting(true)
             const formData = new FormData()
             formData.append('category_id', values.category_id.toString())
             formData.append('name_en', values.name_en)
@@ -108,10 +110,10 @@ export default function MealDialog({ open, onClose, categories, attributes = [],
             if (values.sale_price) {
                 formData.append('sale_price', values.sale_price.toString())
             }
-            
+
             // Add attributes
             formData.append('attributes', JSON.stringify(selectedAttributes))
-            
+
             if (imageFile) {
                 formData.append('image', imageFile)
             } else if (!meal) {
@@ -127,9 +129,11 @@ export default function MealDialog({ open, onClose, categories, attributes = [],
                         formik.resetForm()
                         setImageFile(null)
                         setSelectedAttributes({})
+                        setIsSubmitting(false)
                     },
                     onError: (errors) => {
                         formik.setErrors(errors)
+                        setIsSubmitting(false)
                     },
                 })
             } else {
@@ -139,9 +143,11 @@ export default function MealDialog({ open, onClose, categories, attributes = [],
                         formik.resetForm()
                         setImageFile(null)
                         setSelectedAttributes({})
+                        setIsSubmitting(false)
                     },
                     onError: (errors) => {
                         formik.setErrors(errors)
+                        setIsSubmitting(false)
                     },
                 })
             }
@@ -291,7 +297,7 @@ export default function MealDialog({ open, onClose, categories, attributes = [],
                     {attributes.length > 0 && (
                         <div className="space-y-4 border-t pt-4">
                             <h3 className="text-lg font-semibold">{t('meal-attributes')}</h3>
-                            
+
                             {attributes.map((attribute) => (
                                 <div key={attribute.id} className="space-y-2">
                                     <Label htmlFor={`attribute-${attribute.id}`}>
@@ -299,33 +305,33 @@ export default function MealDialog({ open, onClose, categories, attributes = [],
                                         {attribute.is_required && <span className="text-red-500 ml-1">*</span>}
                                     </Label>
 
-                                     <Select
-                                            value={selectedAttributes[attribute.id]?.toString() || ''}
-                                            onValueChange={(value) => 
-                                                setSelectedAttributes(prev => ({
-                                                    ...prev,
-                                                    [attribute.id]: parseInt(value)
-                                                }))
-                                            }
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder={t('select-option')} />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {attribute.values.map((value) => (
-                                                    <SelectItem key={value.id} value={value.id.toString()}>
-                                                        {isArabic ? value.value_ar : value.value_en}
-                                                        {value.price_modifier !== 0 && (
-                                                            <span className="text-orange-500 ml-2">
-                                                                ({value.price_modifier > 0 ? '+' : ''}{value.price_modifier})
-                                                            </span>
-                                                        )}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    
-                                   
+                                    <Select
+                                        value={selectedAttributes[attribute.id]?.toString() || ''}
+                                        onValueChange={(value) =>
+                                            setSelectedAttributes(prev => ({
+                                                ...prev,
+                                                [attribute.id]: parseInt(value)
+                                            }))
+                                        }
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue placeholder={t('select-option')} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {attribute.values.map((value) => (
+                                                <SelectItem key={value.id} value={value.id.toString()}>
+                                                    {isArabic ? value.value_ar : value.value_en}
+                                                    {value.price_modifier !== 0 && (
+                                                        <span className="text-orange-500 ml-2">
+                                                            ({value.price_modifier > 0 ? '+' : ''}{value.price_modifier})
+                                                        </span>
+                                                    )}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+
+
                                 </div>
                             ))}
                         </div>
@@ -353,7 +359,13 @@ export default function MealDialog({ open, onClose, categories, attributes = [],
                         >
                             {t('cancel')}
                         </Button>
-                        <Button type="submit" disabled={formik.isSubmitting}>
+                        {isSubmitting ? "Submitting..." : "not submitting"}
+                        <Button
+                            className='bg-main hover:bg-second'
+                            type="submit"
+                            disabled={isSubmitting}
+
+                        >
                             {formik.isSubmitting && (
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             )}

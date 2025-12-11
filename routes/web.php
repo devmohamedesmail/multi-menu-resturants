@@ -118,7 +118,7 @@ Route::controller(User_front_controller::class)->group(function(){
 
 // =============== create store ======================
 Route::controller(Create_Store::class)->group(function(){
-    Route::get('/store/home/{store?}/{table?}','store_home')->name('store.home');
+    Route::get('/store/home/{store_name?}/{store_id?}/{table?}','store_home')->name('store.home');
     Route::get('/register/store','index')->name('register.store.page');
     Route::post('/register/store','register_store')->name('register.store');
     Route::get('/store/dashboard','dashboard')->name('store.dashboard');
@@ -135,4 +135,8 @@ Route::controller(Create_Store::class)->group(function(){
     Route::post('/store/meals','storeMeal')->name('store.meal.store');
     Route::put('/store/meals/{id}','updateMeal')->name('store.meal.update');
     Route::delete('/store/meals/{id}','deleteMeal')->name('store.meal.delete');
+    
+    // Order creation and management
+    Route::post('/store/create/order','createOrder')->name('store.create.order');
+    Route::post('/store/order/{id}/status','updateOrderStatus')->name('store.order.update.status');
 });

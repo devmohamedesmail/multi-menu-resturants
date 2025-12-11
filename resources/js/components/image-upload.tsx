@@ -179,7 +179,7 @@ export default function ImageUpload({
                             type="button"
                             variant="outline"
                             size="sm"
-                            className="mt-4"
+                            className="mt-4 bg-main hover:bg-second"
                             disabled={disabled}
                             onClick={(e) => {
                                 e.stopPropagation()

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('meal_attributes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('meal_id')->constrained()->onDelete('cascade');
-            $table->foreignId('attribute_id')->constrained()->onDelete('cascade');
-            $table->foreignId('attribute_value_id')->constrained()->onDelete('cascade');
+            $table->foreignId('meal_id')->constrained('meals')->onDelete('cascade');
+            $table->foreignId('attribute_id')->constrained('attributes')->onDelete('cascade');
+            $table->foreignId('attribute_value_id')->constrained('attribute_values')->onDelete('cascade')->nullable();
             $table->timestamps();
             
             // Ensure a meal can only have one value per attribute

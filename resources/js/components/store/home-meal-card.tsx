@@ -57,9 +57,9 @@ export default function HomeMealCard({ meal , currency}: any) {
             dispatch(add_to_cart({ ...meal, quantity: 1 }))
         }
     
-        const removeFromCartHandler = (mealId: number) => {
-            dispatch(remove_from_cart(mealId))
-        }
+        // const removeFromCartHandler = (mealId: number) => {
+        //     dispatch(remove_from_cart(mealId))
+        // }
     
         const updateQuantity = (mealId: number, newQuantity: number) => {
             const currentItem = cart.find((item: CartItem) => item.id === mealId)
@@ -100,7 +100,7 @@ export default function HomeMealCard({ meal , currency}: any) {
             </div>
             <CardContent className="px-5 pb-3 ">
                 <div className="mb-4">
-                    <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-1">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1 line-clamp-1">
                         {isArabic ? meal.name_ar : meal.name_en}
                     </h3>
                     <p className="text-xs text-orange-500 font-medium mb-2">

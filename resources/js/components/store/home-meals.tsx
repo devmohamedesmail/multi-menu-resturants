@@ -12,7 +12,7 @@ export default function HomeMeals({ filteredMeals, selectedCategory, categories,
     const isArabic = i18n.language === 'ar'
 
     return (
-        <div>
+        <div className='pb-20'>
             {filteredMeals.length === 0 ? (
                 <NoMealsFound />
             ) : (

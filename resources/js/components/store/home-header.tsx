@@ -18,8 +18,8 @@ export default function HomeHeader({ showCart, setShowCart, cartItemsCount, stor
                         <div className="relative">
                             <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-red-400 rounded-full blur-md opacity-50"></div>
                             <img
-                                src={store.image}
-                                alt={store.name}
+                                src={store?.image}
+                                alt={store?.name}
                                 className="relative w-14 h-14 rounded-full object-cover ring-2 ring-white shadow-xl"
                             />
                         </div>

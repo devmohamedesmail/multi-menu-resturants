@@ -27,6 +27,7 @@ interface Props {
 export default function CategoryDialog({ open, onClose, category }: Props) {
     const { t } = useTranslation()
     const [imageFile, setImageFile] = useState<File | null>(null)
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const validationSchema = Yup.object({
         name_en: Yup.string().required(t('required-field')),
@@ -43,41 +44,56 @@ export default function CategoryDialog({ open, onClose, category }: Props) {
         enableReinitialize: true,
         validationSchema,
         onSubmit: async (values) => {
-            const formData = new FormData()
-            formData.append('name_en', values.name_en)
-            formData.append('name_ar', values.name_ar)
-            formData.append('position', values.position.toString())
-            
-            if (imageFile) {
-                formData.append('image', imageFile)
-            } else if (!category) {
-                formik.setFieldError('image', t('required-field'))
-                return
-            }
+            setIsSubmitting(true)
+            try {
+               
+                const formData = new FormData()
+                formData.append('name_en', values.name_en)
+                formData.append('name_ar', values.name_ar)
+                formData.append('position', values.position.toString())
 
-            if (category?.id) {
-                formData.append('_method', 'PUT')
-                router.post(route('store.category.update', category.id), formData, {
-                    onSuccess: () => {
-                        onClose()
-                        formik.resetForm()
-                        setImageFile(null)
-                    },
-                    onError: (errors) => {
-                        formik.setErrors(errors)
-                    },
-                })
-            } else {
-                router.post(route('store.category.store'), formData, {
-                    onSuccess: () => {
-                        onClose()
-                        formik.resetForm()
-                        setImageFile(null)
-                    },
-                    onError: (errors) => {
-                        formik.setErrors(errors)
-                    },
-                })
+                if (imageFile) {
+                    formData.append('image', imageFile)
+                } else if (!category) {
+                    formik.setFieldError('image', t('required-field'))
+                    return
+                }
+
+                if (category?.id) {
+                    formData.append('_method', 'PUT')
+                    router.post(route('store.category.update', category.id), formData, {
+                        onSuccess: () => {
+                            onClose()
+                            formik.resetForm()
+                            setImageFile(null)
+                             setIsSubmitting(false)
+                        },
+                        onError: (errors) => {
+                            formik.setErrors(errors)
+                             setIsSubmitting(false)
+                        },
+                    })
+                   
+                } else {
+
+                    router.post(route('store.category.store'), formData, {
+                        onSuccess: () => {
+                            onClose()
+                            formik.resetForm()
+                            setImageFile(null)
+                             setIsSubmitting(false)
+                        },
+                        onError: (errors) => {
+                            formik.setErrors(errors)
+                             setIsSubmitting(false)
+                        },
+                    })
+                }
+            } catch (err) {
+                console.error(err);
+                setIsSubmitting(false);
+            } finally {
+                setIsSubmitting(false);
             }
         },
     })
@@ -171,8 +187,11 @@ export default function CategoryDialog({ open, onClose, category }: Props) {
                         >
                             {t('cancel')}
                         </Button>
-                        <Button type="submit" disabled={formik.isSubmitting}>
-                            {formik.isSubmitting && (
+                        <Button
+                            className='bg-main hover:bg-second'
+                            type="submit"
+                            disabled={isSubmitting}>
+                            {isSubmitting && (
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             )}
                             {category ? t('update') : t('create')}

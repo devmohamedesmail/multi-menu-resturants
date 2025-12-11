@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Order;
 use App\Models\Country;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
@@ -41,5 +42,11 @@ class Store extends Model
     public function country()
     {
         return $this->belongsTo(Country::class);   
+    }
+
+
+    // Define relationship to Order model
+    public function orders(){
+        return $this->hasMany(Order::class);
     }
 }

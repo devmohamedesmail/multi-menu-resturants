@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('attributes', function (Blueprint $table) {
             $table->id();
+             $table->foreignId('meal_id')->constrained('meals')->onDelete('cascade');
             $table->string('name_en');
             $table->string('name_ar');
-            $table->string('type')->default('select'); // select, radio, checkbox
-            $table->boolean('is_required')->default(false);
             $table->integer('sort_order')->default(0);
             $table->timestamps();
         });

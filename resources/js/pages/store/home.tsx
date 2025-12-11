@@ -18,6 +18,7 @@ import HomeMeals from '@/components/store/home-meals'
 import HomeSearch from '@/components/store/home-search'
 import FloatCart from '@/components/front/FloatCart'
 import BottomNav from '@/components/front/BottomNav'
+import HomeFloatButtons from '@/components/store/home-float-buttons'
 
 interface Category {
     id: number
@@ -132,26 +133,26 @@ export default function Home({ store, table }: Props) {
             <Head title={store.name} />
 
             <div className="min-h-screen bg-gradient-to-b from-black via-black/90 to-black">
-                {/* Floating Header */}
+              
                 <HomeHeader showCart={showCart} setShowCart={setShowCart} cartItemsCount={cartItemsCount} store={store} />
 
 
 
-                <HomeHero 
-                  store={store} 
-                  table={table}
-                  />
+                <HomeHero
+                    store={store}
+                    table={table}
+                />
 
                 <div className="container mx-auto px-4 pb-12">
 
                     <HomeSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
 
-                    <HomeCategories 
-                     selectedCategory={selectedCategory} 
-                     setSelectedCategory={setSelectedCategory} 
-                     categories={categories} 
-                     meals={meals} />
+                    <HomeCategories
+                        selectedCategory={selectedCategory}
+                        setSelectedCategory={setSelectedCategory}
+                        categories={categories}
+                        meals={meals} />
 
                     {/* Meals Grid */}
 
@@ -298,7 +299,7 @@ export default function Home({ store, table }: Props) {
             </div>
 
 
-
+             <HomeFloatButtons table={table} store={store} />
 
             <FloatCart />
             {/* <BottomNav /> */}

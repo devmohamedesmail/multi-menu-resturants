@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('attribute_values', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('attribute_id')->constrained()->onDelete('cascade');
+            $table->foreignId('attribute_id')->constrained('attributes')->onDelete('cascade');
+            $table->foreignId('meal_id')->constrained('meals')->onDelete('cascade');
             $table->string('value_en');
             $table->string('value_ar');
-            $table->decimal('price_modifier', 10, 2)->default(0); // Additional price for this option
+            $table->decimal('price', 10, 2)->default(0); // Additional price for this option
             $table->integer('sort_order')->default(0);
             $table->timestamps();
         });
