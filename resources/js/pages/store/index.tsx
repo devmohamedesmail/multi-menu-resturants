@@ -10,6 +10,7 @@ import DashboardCategoriesTab from '@/components/store/dashboard-categories-tab'
 import DashboardOverviewTab from '@/components/store/dashboard-overview-tab'
 import DashboardMealsTab from '@/components/store/dashboard-meals-tab'
 import DashboardOrdersTab from '@/components/store/dashboard-orders-tab'
+import DashboardTablesTab from '@/components/store/dashboard-tables-tab'
 
 interface Category {
     id: number
@@ -67,9 +68,10 @@ interface Props {
     country: any
     attributes?: Attribute[]
     orders: any[]
+    tables: any[]
 }
 
-export default function Dashboard({ store, categories = [], meals = [], stats, country, attributes = [], orders=[] }: Props) {
+export default function Dashboard({ store, categories = [], meals = [], stats, country, attributes = [], orders=[], tables=[] }: Props) {
     const { t, i18n } = useTranslation()
     const [activeTab, setActiveTab] = useState('overview')
     const isArabic = i18n.language === 'ar'
@@ -104,23 +106,12 @@ export default function Dashboard({ store, categories = [], meals = [], stats, c
                 {/* Main Content */}
                 <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-                        {/* Navigation Tabs */}
-                    
                         <DashboardNavigationTabs />
-
-                        {/* Overview Tab */}
                         <DashboardOverviewTab stats={stats} setActiveTab={setActiveTab} />
-
-                        {/* Categories Tab */}
-                        
                         <DashboardCategoriesTab categories={categories} setEditingCategory={setEditingCategory} setCategoryDialogOpen={setCategoryDialogOpen} handleDeleteCategory={handleDeleteCategory} />
-
-                        {/* Meals Tab */}
-                       
                         <DashboardMealsTab meals = {meals} setEditingMeal={setEditingMeal} setMealDialogOpen={setMealDialogOpen} country={country} handleDeleteMeal={handleDeleteMeal} />
-
-                
                         <DashboardOrdersTab orders={orders} />
+                        <DashboardTablesTab store={store} tables={tables} />
                     </Tabs>
                 </main>
             </div>

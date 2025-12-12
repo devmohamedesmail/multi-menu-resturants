@@ -50,6 +50,7 @@ class Create_Store extends Controller
             $country = $store->country()->first();
             $attributes = Attribute::with('values')->orderBy('sort_order')->get();
             $orders = $store->orders()->get();
+            $tables = $store->tables()->get();
             
             $stats = [
                 'totalCategories' => $categories->count(),
@@ -66,6 +67,7 @@ class Create_Store extends Controller
                 'stats' => $stats,
                 'attributes' => $attributes,
                 'orders'=>$orders,
+                'tables'=>$tables,
             ]);
         } else{
             return Inertia::render("store/register-store/index");
@@ -478,6 +480,148 @@ class Create_Store extends Controller
         } catch (\Throwable $th) {
             \Log::error('Order status update error: ' . $th->getMessage());
             return back()->withErrors(['error' => 'Failed to update order status: ' . $th->getMessage()]);
+        }
+    }
+
+    /**
+     * Store a new table
+     */
+    public function storeTable(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $store = Store::where('user_id', $user->id)->first();
+
+            if (!$store) {
+                return back()->withErrors(['error' => 'Store not found']);
+            }
+
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'capacity' => 'required|integer|min:1',
+            ]);
+
+            $table = $store->tables()->create([
+                'name' => $validated['name'],
+                'capacity' => $validated['capacity'],
+            ]);
+
+            // Generate QR Code
+            $qrCode = $this->generateAndUploadQRCode($table, $store);
+            $table->update(['qr_code' => $qrCode]);
+
+            return back()->with('success', 'Table created successfully');
+
+        } catch (\Throwable $th) {
+            \Log::error('Table creation error: ' . $th->getMessage());
+            return back()->withErrors(['error' => 'Failed to create table: ' . $th->getMessage()]);
+        }
+    }
+
+    /**
+     * Update table
+     */
+    public function updateTable(Request $request, $id)
+    {
+        try {
+            $user = Auth::user();
+            $store = Store::where('user_id', $user->id)->first();
+            
+            if (!$store) {
+                return back()->withErrors(['error' => 'Store not found']);
+            }
+
+            $table = $store->tables()->findOrFail($id);
+
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'capacity' => 'required|integer|min:1',
+            ]);
+
+            $table->update([
+                'name' => $validated['name'],
+                'capacity' => $validated['capacity'],
+            ]);
+
+            // Regenerate QR Code if name changed
+            if ($table->wasChanged('name')) {
+                $qrCode = $this->generateAndUploadQRCode($table, $store);
+                $table->update(['qr_code' => $qrCode]);
+            }
+
+            return back()->with('success', 'Table updated successfully');
+
+        } catch (\Throwable $th) {
+            \Log::error('Table update error: ' . $th->getMessage());
+            return back()->withErrors(['error' => 'Failed to update table: ' . $th->getMessage()]);
+        }
+    }
+
+    /**
+     * Delete table
+     */
+    public function deleteTable($id)
+    {
+        try {
+            $user = Auth::user();
+            $store = Store::where('user_id', $user->id)->first();
+            
+            if (!$store) {
+                return back()->withErrors(['error' => 'Store not found']);
+            }
+
+            $table = $store->tables()->findOrFail($id);
+            $table->delete();
+
+            return back()->with('success', 'Table deleted successfully');
+
+        } catch (\Throwable $th) {
+            \Log::error('Table deletion error: ' . $th->getMessage());
+            return back()->withErrors(['error' => 'Failed to delete table: ' . $th->getMessage()]);
+        }
+    }
+
+    /**
+     * Generate QR Code and upload to Cloudinary
+     */
+    private function generateAndUploadQRCode($table, $store)
+    {
+        try {
+            // Generate QR code URL (link to store with table number)
+            $url = route('store.home', [
+                'store_name' => $store->name,
+                'store_id' => $store->id,
+                'table' => $table->id
+            ]);
+
+            // Generate QR code as PNG
+            $qrCode = \SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')
+                ->size(500)
+                ->margin(2)
+                ->generate($url);
+
+            // Upload to Cloudinary
+            $cloudinary = new Cloudinary([
+                'cloud' => [
+                    'cloud_name' => config('services.cloudinary.cloud_name'),
+                    'api_key' => config('services.cloudinary.api_key'),
+                    'api_secret' => config('services.cloudinary.api_secret'),
+                ],
+            ]);
+
+            $uploadResult = $cloudinary->uploadApi()->upload(
+                'data:image/png;base64,' . base64_encode($qrCode),
+                [
+                    'folder' => 'qr_codes',
+                    'public_id' => 'table_' . $table->id . '_' . time(),
+                ]
+            );
+
+            return $uploadResult['secure_url'];
+
+        } catch (\Throwable $th) {
+            \Log::error('QR Code generation error: ' . $th->getMessage());
+            return null;
         }
     }
 }

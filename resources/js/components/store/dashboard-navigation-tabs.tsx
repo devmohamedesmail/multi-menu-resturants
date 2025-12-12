@@ -11,23 +11,28 @@ import { useTranslation } from 'react-i18next'
 export default function DashboardNavigationTabs() {
     const { t } = useTranslation()
     return (
-        <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
+        <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid">
             <TabsTrigger value="overview" className="flex items-center gap-2">
                 <LayoutDashboard className="w-4 h-4" />
-                <span className="hidden sm:inline">{t('dashboard')}</span>
+                <span className="hidden sm:inline">{t('store.dashboard')}</span>
             </TabsTrigger>
             <TabsTrigger value="categories" className="flex items-center gap-2">
                 <FolderOpen className="w-4 h-4" />
-                <span className="hidden sm:inline">{t('categories')}</span>
+                <span className="hidden sm:inline">{t('store.categories')}</span>
             </TabsTrigger>
             <TabsTrigger value="meals" className="flex items-center gap-2">
                 <UtensilsCrossed className="w-4 h-4" />
-                <span className="hidden sm:inline">{t('meals')}</span>
+                <span className="hidden sm:inline">{t('store.meals')}</span>
             </TabsTrigger>
 
             <TabsTrigger value="orders" className="flex items-center gap-2">
                 <UtensilsCrossed className="w-4 h-4" />
-                <span className="hidden sm:inline">{t('orders')}</span>
+                <span className="hidden sm:inline">{t('store.orders')}</span>
+            </TabsTrigger>
+
+             <TabsTrigger value="tables" className="flex items-center gap-2">
+                <UtensilsCrossed className="w-4 h-4" />
+                <span className="hidden sm:inline">{t('store.tables')}</span>
             </TabsTrigger>
         </TabsList>
     )

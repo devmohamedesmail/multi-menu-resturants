@@ -139,4 +139,9 @@ Route::controller(Create_Store::class)->group(function(){
     // Order creation and management
     Route::post('/store/create/order','createOrder')->name('store.create.order');
     Route::post('/store/order/{id}/status','updateOrderStatus')->name('store.order.update.status');
+    
+    // Table CRUD
+    Route::post('/store/tables','storeTable')->name('store.table.store');
+    Route::put('/store/tables/{id}','updateTable')->name('store.table.update');
+    Route::delete('/store/tables/{id}','deleteTable')->name('store.table.delete');
 });

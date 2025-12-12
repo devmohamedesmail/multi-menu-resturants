@@ -49,4 +49,9 @@ class Store extends Model
     public function orders(){
         return $this->hasMany(Order::class);
     }
+
+    // Define relationship to Table model
+    public function tables(){
+        return $this->hasMany(Table::class);
+    }
 }
