@@ -7,9 +7,32 @@ use App\Models\Setting;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Cloudinary\Cloudinary;
 
 class Setting_controller extends Controller
 {
+
+    private function uploadToCloudinary($file, $folder)
+    {
+        try {
+            $cloudinary = new Cloudinary([
+                'cloud' => [
+                    'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                    'api_key' => env('CLOUDINARY_API_KEY'),
+                    'api_secret' => env('CLOUDINARY_API_SECRET'),
+                ],
+            ]);
+
+            $result = $cloudinary->uploadApi()->upload($file->getRealPath(), [
+                'folder' => $folder,
+            ]);
+
+            return $result['secure_url'];
+        } catch (\Exception $e) {
+            \Log::error('Cloudinary upload failed: ' . $e->getMessage());
+            throw new \Exception('Image upload failed');
+        }
+    }
     // update_settings
     public function settings()
     {
@@ -35,22 +58,20 @@ class Setting_controller extends Controller
             $setting->currency_ar = $request->currency_ar;
 
 
-            $logo = $request->logo;
-            if ($logo) {
-                $image_name = Str::uuid()  . '.' . $logo->getClientOriginalExtension();
-                $logo->move(public_path('uploads'), $image_name);
-                $setting->logo = $image_name;
+            if ($request->hasFile('logo')) {
+                $imagePath = $this->uploadToCloudinary($request->file('logo'), 'stores/logos');
+                $setting->logo = $imagePath;
             }
-
-            $favicon = $request->favicon;
-            if ($favicon) {
-                $image_name = Str::uuid()  . '.' . $favicon->getClientOriginalExtension();
-                $favicon->move(public_path('uploads'), $image_name);
-                $setting->favicon = $image_name;
+            if ($request->hasFile('favicon')) {
+                $bannerPath = $this->uploadToCloudinary($request->file('favicon'), 'stores/favicons');
+                $setting->favicon = $bannerPath;
             }
-
 
             $setting->save();
+            return redirect()->back();
+
+          
+
         } else {
             $setting = new Setting();
             $setting->title_en = $request->title_en;
@@ -62,22 +83,17 @@ class Setting_controller extends Controller
             $setting->address = $request->address;
             $setting->currency_en = $request->currency_en;
             $setting->currency_ar = $request->currency_ar;
-
-
-            $logo = $request->image;
-            if ($logo) {
-                $image_name = Str::uuid()  . '.' . $logo->getClientOriginalExtension();
-                $logo->move(public_path('uploads'), $image_name);
-                $setting->logo = $image_name;
+            if ($request->hasFile('logo')) {
+                $imagePath = $this->uploadToCloudinary($request->file('logo'), 'stores/logos');
+                $setting->logo = $imagePath;
             }
-
-            $favicon = $request->favicon;
-            if ($favicon) {
-                $image_name = Str::uuid()  . '.' . $favicon->getClientOriginalExtension();
-                $favicon->move(public_path('uploads'), $image_name);
-                $setting->favicon = $image_name;
+            if ($request->hasFile('favicon')) {
+                $bannerPath = $this->uploadToCloudinary($request->file('favicon'), 'stores/favicons');
+                $setting->favicon = $bannerPath;
             }
             $setting->save();
-        };
+            return redirect()->back();
+        }
+        
     }
 }

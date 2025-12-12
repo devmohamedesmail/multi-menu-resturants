@@ -20,26 +20,7 @@ export function AppSidebar() {
             href: '/dashboard',
             icon: CircleDashed,
         },
-        {
-            title: t('categories'),
-            href: '/admin/categories',
-            icon: CircleDashed,
-        },
-        {
-            title: t('meals'),
-            href: '/admin/meals',
-            icon: CircleDashed,
-        },
-        {
-            title: t('orders'),
-            href: '/admin/orders',
-            icon: CircleDashed,
-        },
-        {
-            title: t('daily-orders'),
-            href: '/admin/dialy/orders',
-            icon: CircleDashed,
-        },
+       
         {
             title: t('settings'),
             href: '/admin/settings',

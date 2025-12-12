@@ -7,6 +7,7 @@
     <link rel="icon" href="/uploads/245ec3bd-e039-4e82-a00a-97a7fd2f0bee.png" type="image/x-icon" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="shortcut icon" href="https://res.cloudinary.com/dbcssdyv3/image/upload/v1765559375/stores/favicons/gviqcfqgs8axdlby11la.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
     {{-- Inline script to detect system dark mode preference and apply it immediately --}}
     <script>

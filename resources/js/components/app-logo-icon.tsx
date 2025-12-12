@@ -6,11 +6,9 @@ export default function AppLogoIcon(props: SVGAttributes<SVGElement>) {
     
     return (
         
-        <div>
-            {app_settings && app_settings.logo ? <img className='w-full ' src={`/uploads/${app_settings.logo}`} alt="" /> :''}
-          
-
-            <h4>{app_settings && app_settings.title_en ? app_settings.title_ar : ''}</h4>
+        <div className='bg-red-600 w-full'>
+            {app_settings && app_settings.logo ? 
+            <img className='w-full ' src={`${app_settings.logo}`} alt="" /> :''}
         </div>
     );
 }

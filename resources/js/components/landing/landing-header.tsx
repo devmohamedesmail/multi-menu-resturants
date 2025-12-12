@@ -13,7 +13,8 @@ export default function LandingHeader() {
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="flex items-center justify-between h-16">
                             <div className="flex items-center gap-2">
-                                <ChefHat className="w-8 h-8 text-orange-500" />
+                                {/* <ChefHat className="w-8 h-8 text-orange-500" /> */}
+                                <img src={app_settings?.logo} alt={app_settings?.title_en} className=" w-20 h-20 " />
                                 <span className="text-xl font-bold text-gray-900 dark:text-white">
                                     {i18n.language === 'ar' ?  app_settings?.title_ar : app_settings?.title_en}
                                 </span>
