@@ -85,7 +85,7 @@ export default function DashboardHeader() {
                 </div>
             </header>
             <h1 className="text-2xl font-bold text-gray-900 text-center my-5 dark:text-white">
-                {t('restaurant-dashboard')}
+                {t('dashboard.restaurant-dashboard')}
             </h1>
 
         </>

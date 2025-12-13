@@ -10,7 +10,7 @@ import {
 import { Globe, Languages } from 'lucide-react'
 
 export default function LanguageSelect() {
-    const { i18n } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     function changeLanguage(lang: string) {
         i18n.changeLanguage(lang);
@@ -19,9 +19,8 @@ export default function LanguageSelect() {
     return (
         <Select value={i18n.language} onValueChange={changeLanguage}>
             <SelectTrigger className="w-[140px]">
-                {/* <Languages className="w-4 h-4 mr-2" /> */}
                 <Globe className="w-4 h-4 mr-2" />
-                <SelectValue />
+                <SelectValue placeholder={t('common.select-language')}/>
             </SelectTrigger>
             <SelectContent>
                 <SelectItem value="en"> English </SelectItem>

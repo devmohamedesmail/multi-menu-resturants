@@ -5,12 +5,12 @@ import { useTranslation } from 'react-i18next'
 export default function LandingBenefits() {
     const { t } = useTranslation()
     const benefits = [
-        t('benefit-1'),
-        t('benefit-2'),
-        t('benefit-3'),
-        t('benefit-4'),
-        t('benefit-5'),
-        t('benefit-6'),
+        t('landing.benefit-1'),
+        t('landing.benefit-2'),
+        t('landing.benefit-3'),
+        t('landing.benefit-4'),
+        t('landing.benefit-5'),
+        t('landing.benefit-6'),
     ]
     return (
         <section className="py-20 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-950/20 dark:to-red-950/20">
@@ -18,10 +18,10 @@ export default function LandingBenefits() {
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
                     <div>
                         <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
-                            {t('why-choose-us')}
+                            {t('landing.why-choose-us')}
                         </h2>
                         <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
-                            {t('why-choose-us-desc')}
+                            {t('landing.why-choose-us-desc')}
                         </p>
                         <div className="space-y-4">
                             {benefits.map((benefit, index) => (

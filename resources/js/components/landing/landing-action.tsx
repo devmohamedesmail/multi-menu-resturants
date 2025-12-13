@@ -10,15 +10,15 @@ export default function LandingAction() {
         <section className="py-20 bg-gradient-to-r from-orange-600 to-red-600">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <h2 className="text-4xl font-bold text-white mb-6">
-                    {t('ready-to-start')}
+                    {t('landing.ready-to-start')}
                 </h2>
                 <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-                    {t('ready-to-start-desc')}
+                    {t('landing.ready-to-start-desc')}
                 </p>
                 <div className="flex flex-wrap gap-4 justify-center">
                     <Link href={route('register.store.page')}>
                         <Button size="lg" variant="secondary" className="text-lg px-8">
-                            {t('create-account')}
+                            {t('landing.start-free-trial')}
                             <ArrowRight className="w-5 h-5 ml-2" />
                         </Button>
                     </Link>
@@ -28,7 +28,7 @@ export default function LandingAction() {
                             variant="outline"
                             className="text-lg px-8 bg-white/10 text-white border-white hover:bg-white/20"
                         >
-                            {t('login')}
+                            {t('landing.login')}
                         </Button>
                     </Link>
                 </div>

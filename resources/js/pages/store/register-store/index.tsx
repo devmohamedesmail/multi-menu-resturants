@@ -130,7 +130,7 @@ export default function RegisterStore({ countries }: any) {
 
     return (
         <>
-            <Head title={t('register-store')} />
+            <Head title={t('auth.register-store')} />
 
             <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
                 <div className="w-full max-w-2xl">
@@ -140,10 +140,10 @@ export default function RegisterStore({ countries }: any) {
                             <Store className="w-8 h-8 text-primary" />
                         </div>
                         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                            {t('register-store')}
+                            {t('auth.register-store')}
                         </h1>
                         <p className="text-gray-600 dark:text-gray-400">
-                            {t('store-registration')}
+                            {t('auth.store-registration')}
                         </p>
                     </div>
 
@@ -166,7 +166,7 @@ export default function RegisterStore({ countries }: any) {
                                             )}
                                         </div>
                                         <span className="mt-2 text-xs font-medium text-gray-600 dark:text-gray-400">
-                                            {step === 1 ? t('account-info') : t('store-info')}
+                                            {step === 1 ? t('auth.account-info') : t('auth.store-info')}
                                         </span>
                                     </div>
                                     {step < totalSteps && (
@@ -189,17 +189,17 @@ export default function RegisterStore({ countries }: any) {
                                 {currentStep === 1 ? (
                                     <>
                                         <User className="w-5 h-5" />
-                                        {t('create-your-account')}
+                                        {t('auth.create-your-account')}
                                     </>
                                 ) : (
                                     <>
                                         <Store className="w-5 h-5" />
-                                        {t('setup-your-store')}
+                                        {t('auth.setup-your-store')}
                                     </>
                                 )}
                             </CardTitle>
                             <CardDescription>
-                                {t('step')} {currentStep} {t('of')} {totalSteps}
+                                {t('auth.step')} {currentStep} {t('auth.of')} {totalSteps}
                             </CardDescription>
                         </CardHeader>
 
@@ -209,7 +209,7 @@ export default function RegisterStore({ countries }: any) {
                                 {currentStep === 1 && (
                                     <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
                                         <div className="grid gap-2">
-                                            <Label htmlFor="name">{t('full-name')}</Label>
+                                            <Label htmlFor="name">{t('auth.full-name')}</Label>
                                             <Input
                                                 id="name"
                                                 name="name"
@@ -219,7 +219,7 @@ export default function RegisterStore({ countries }: any) {
                                                 onChange={formik.handleChange}
                                                 onBlur={formik.handleBlur}
                                                 disabled={isSubmitting}
-                                                placeholder={t('enter-full-name')}
+                                                placeholder={t('auth.enter-full-name')}
                                                 className="h-11"
                                             />
                                             {formik.touched.name && formik.errors.name && (
@@ -228,7 +228,7 @@ export default function RegisterStore({ countries }: any) {
                                         </div>
 
                                         <div className="grid gap-2">
-                                            <Label htmlFor="email">{t('email')}</Label>
+                                            <Label htmlFor="email">{t('auth.email')}</Label>
                                             <Input
                                                 id="email"
                                                 name="email"
@@ -237,7 +237,7 @@ export default function RegisterStore({ countries }: any) {
                                                 onChange={formik.handleChange}
                                                 onBlur={formik.handleBlur}
                                                 disabled={isSubmitting}
-                                                placeholder={t('enter-email')}
+                                                placeholder={t('auth.enter-email')}
                                                 className="h-11"
                                             />
                                             {formik.touched.email && formik.errors.email && (
@@ -246,7 +246,7 @@ export default function RegisterStore({ countries }: any) {
                                         </div>
 
                                         <div className="grid gap-2">
-                                            <Label htmlFor="password">{t('password')}</Label>
+                                            <Label htmlFor="password">{t('auth.password')}</Label>
                                             <Input
                                                 id="password"
                                                 name="password"
@@ -255,7 +255,7 @@ export default function RegisterStore({ countries }: any) {
                                                 onChange={formik.handleChange}
                                                 onBlur={formik.handleBlur}
                                                 disabled={isSubmitting}
-                                                placeholder={t('enter-password')}
+                                                placeholder={t('auth.enter-password')}
                                                 className="h-11"
                                             />
                                             {formik.touched.password && formik.errors.password && (
@@ -264,7 +264,7 @@ export default function RegisterStore({ countries }: any) {
                                         </div>
 
                                         <div className="grid gap-2">
-                                            <Label htmlFor="password_confirmation">{t('confirm-password')}</Label>
+                                            <Label htmlFor="password_confirmation">{t('auth.confirm-password')}</Label>
                                             <Input
                                                 id="password_confirmation"
                                                 name="password_confirmation"
@@ -273,7 +273,7 @@ export default function RegisterStore({ countries }: any) {
                                                 onChange={formik.handleChange}
                                                 onBlur={formik.handleBlur}
                                                 disabled={isSubmitting}
-                                                placeholder={t('confirm-password')}
+                                                placeholder={t('auth.confirm-password')}
                                                 className="h-11"
                                             />
                                             {formik.touched.password_confirmation && formik.errors.password_confirmation && (
@@ -289,7 +289,7 @@ export default function RegisterStore({ countries }: any) {
                                       
                                   
                                         <div className="grid gap-2">
-                                            <Label htmlFor="store_name">{t('store-name')}</Label>
+                                            <Label htmlFor="store_name">{t('auth.store-name')}</Label>
                                             <Input
                                                 id="store_name"
                                                 name="store_name"
@@ -310,7 +310,7 @@ export default function RegisterStore({ countries }: any) {
                                                 }}
                                                 onBlur={formik.handleBlur}
                                                 disabled={isSubmitting}
-                                                placeholder={t('enter-store-name')}
+                                                placeholder={t('auth.enter-store-name')}
                                                 className="h-11"
                                             />
                                             {formik.touched.store_name && formik.errors.store_name && (
@@ -320,7 +320,7 @@ export default function RegisterStore({ countries }: any) {
 
                                         <ImageUpload
                                             id="image"
-                                            label={t('store-logo')}
+                                            label={t('auth.store-logo')}
                                             required
                                             accept="image/*"
                                             onChange={(file) => formik.setFieldValue('image', file)}
@@ -331,7 +331,7 @@ export default function RegisterStore({ countries }: any) {
 
                                         <ImageUpload
                                             id="banner"
-                                            label={`${t('store-banner')} (${t('optional')})`}
+                                            label={`${t('auth.store-banner')} (${t('auth.optional')})`}
                                             accept="image/*"
                                             onChange={(file) => formik.setFieldValue('banner', file)}
                                             disabled={isSubmitting}
@@ -341,7 +341,7 @@ export default function RegisterStore({ countries }: any) {
 
                                         <div className="grid gap-2">
                                             <Label htmlFor="store_email">
-                                                {t('store-email')} <span className="text-gray-400 text-xs">({t('optional')})</span>
+                                                {t('auth.store-email')} <span className="text-gray-400 text-xs">({t('auth.optional')})</span>
                                             </Label>
                                             <Input
                                                 id="store_email"
@@ -351,7 +351,7 @@ export default function RegisterStore({ countries }: any) {
                                                 onChange={formik.handleChange}
                                                 onBlur={formik.handleBlur}
                                                 disabled={isSubmitting}
-                                                placeholder={t('enter-store-email')}
+                                                placeholder={t('auth.enter-store-email')}
                                                 className="h-11"
                                             />
                                             {formik.touched.store_email && formik.errors.store_email && (
@@ -361,7 +361,7 @@ export default function RegisterStore({ countries }: any) {
 
                                         <div className="grid gap-2">
                                             <Label htmlFor="store_phone">
-                                                {t('store-phone')} <span className="text-gray-400 text-xs">({t('optional')})</span>
+                                                {t('auth.store-phone')} <span className="text-gray-400 text-xs">({t('auth.optional')})</span>
                                             </Label>
                                             <Input
                                                 id="store_phone"
@@ -371,7 +371,7 @@ export default function RegisterStore({ countries }: any) {
                                                 onChange={formik.handleChange}
                                                 onBlur={formik.handleBlur}
                                                 disabled={isSubmitting}
-                                                placeholder={t('enter-store-phone')}
+                                                placeholder={t('auth.enter-store-phone')}
                                                 className="h-11"
                                             />
                                             {formik.touched.store_phone && formik.errors.store_phone && (
@@ -381,7 +381,7 @@ export default function RegisterStore({ countries }: any) {
 
                                         <div className="grid gap-2">
                                             <Label htmlFor="store_address">
-                                                {t('store-address')} <span className="text-gray-400 text-xs">({t('optional')})</span>
+                                                {t('auth.store-address')} <span className="text-gray-400 text-xs">({t('auth.optional')})</span>
                                             </Label>
                                             <Input
                                                 id="store_address"
@@ -391,7 +391,7 @@ export default function RegisterStore({ countries }: any) {
                                                 onChange={formik.handleChange}
                                                 onBlur={formik.handleBlur}
                                                 disabled={isSubmitting}
-                                                placeholder={t('enter-store-address')}
+                                                placeholder={t('auth.enter-store-address')}
                                                 className="h-11"
                                             />
                                             {formik.touched.store_address && formik.errors.store_address && (
@@ -401,7 +401,7 @@ export default function RegisterStore({ countries }: any) {
 
                                         <div className="grid gap-2">
                                             <Label htmlFor="store_description">
-                                                {t('store-description')} <span className="text-gray-400 text-xs">({t('optional')})</span>
+                                                {t('auth.store-description')} <span className="text-gray-400 text-xs">({t('auth.optional')})</span>
                                             </Label>
                                             <textarea
                                                 id="store_description"
@@ -410,7 +410,7 @@ export default function RegisterStore({ countries }: any) {
                                                 onChange={formik.handleChange}
                                                 onBlur={formik.handleBlur}
                                                 disabled={isSubmitting}
-                                                placeholder={t('enter-store-description')}
+                                                placeholder={t('auth.enter-store-description')}
                                                 className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                                 rows={4}
                                             />
@@ -420,7 +420,7 @@ export default function RegisterStore({ countries }: any) {
                                         </div>
 
                                         <div className="grid gap-2">
-                                            <Label>{t('store.choose-country')}</Label>
+                                            <Label>{t('auth.choose-country')}</Label>
 
                                             <Select
                                                 value={formik.values.country_id}
@@ -459,7 +459,7 @@ export default function RegisterStore({ countries }: any) {
                                             className="flex-1"
                                         >
                                             <ArrowLeft className="w-4 h-4 mr-2" />
-                                            {t('previous')}
+                                            {t('auth.back')}
                                         </Button>
                                     )}
 
@@ -470,7 +470,7 @@ export default function RegisterStore({ countries }: any) {
                                             disabled={isSubmitting}
                                             className="flex-1"
                                         >
-                                            {t('next')}
+                                            {t('auth.next')}
                                             <ArrowRight className="w-4 h-4 ml-2" />
                                         </Button>
                                     ) : (
@@ -482,12 +482,12 @@ export default function RegisterStore({ countries }: any) {
                                             {isSubmitting ? (
                                                 <>
                                                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                                                    {t('submit')}...
+                                                    {t('auth.submit')}...
                                                 </>
                                             ) : (
                                                 <>
                                                     <CheckCircle2 className="w-4 h-4 mr-2" />
-                                                    {t('complete-registration')}
+                                                    {t('auth.complete-registration')}
                                                 </>
                                             )}
                                         </Button>
@@ -500,9 +500,9 @@ export default function RegisterStore({ countries }: any) {
                     {/* Footer */}
                     <div className="mt-6 text-center">
                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                            {t('already-account')}{' '}
+                            {t('auth.already-account')}{' '}
                             <a href={route('login')} className="text-primary font-medium hover:underline">
-                                {t('login')}
+                                {t('auth.login')}
                             </a>
                         </p>
                     </div>

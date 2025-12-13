@@ -20,33 +20,33 @@ export default function LandingFeatures() {
      const features = [
         {
             icon: QrCode,
-            title: t('qr-code-ordering'),
-            description: t('qr-code-ordering-desc'),
+            title: t('landing.qr-code-ordering'),
+            description: t('landing.qr-code-ordering-desc'),
         },
         {
             icon: Smartphone,
-            title: t('mobile-friendly'),
-            description: t('mobile-friendly-desc'),
+            title: t('landing.mobile-friendly'),
+            description: t('landing.mobile-friendly-desc'),
         },
         {
             icon: Menu,
-            title: t('digital-menu'),
-            description: t('digital-menu-desc'),
+            title: t('landing.digital-menu'),
+            description: t('landing.digital-menu-desc'),
         },
         {
             icon: ShoppingCart,
-            title: t('easy-ordering'),
-            description: t('easy-ordering-desc'),
+            title: t('landing.easy-ordering'),
+            description: t('landing.easy-ordering-desc'),
         },
         {
             icon: BarChart3,
-            title: t('analytics-dashboard'),
-            description: t('analytics-dashboard-desc'),
+            title: t('landing.analytics-dashboard'),
+            description: t('landing.analytics-dashboard-desc'),
         },
         {
             icon: Globe,
             title: t('multi-language'),
-            description: t('multi-language-desc'),
+            description: t('landing.multi-language-desc'),
         },
     ]
   return (
@@ -54,10 +54,10 @@ export default function LandingFeatures() {
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="text-center mb-16">
                             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                                {t('powerful-features')}
+                                {t('landing.powerful-features')}
                             </h2>
                             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                                {t('powerful-features-desc')}
+                                {t('landing.powerful-features-desc')}
                             </p>
                         </div>
 

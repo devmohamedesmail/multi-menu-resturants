@@ -15,37 +15,38 @@ export default function LandingHero() {
                 <div className='flex flex-col item-center justify-center '>
                     <div className="inline-flex items-center w-fit gap-2 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
                         <Zap className="w-4 h-4" />
-                        {t('revolutionary-platform')}
+                        {t('landing.revolutionary-platform')}
                     </div>
 
                     <h1 className="text-3xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight text-center">
-                        {t('transform-your-restaurant')}
+                        {t('landing.transform-your-restaurant')}
                     </h1>
 
                     <p className="text-md text-gray-600 dark:text-gray-300 mb-8 text-center">
-                        {t('landing-hero-description')}
+                        {t('landing.landing-hero-description')}
                     </p>
                     <div className="flex flex-wrap gap-4 justify-center">
                         <Link href={route('register.store.page')}>
                             <Button size="lg" className="text-lg px-8 bg-main hover:bg-second hover:text-white" >
-                                {t('start-free-trial')}
+                                {t('landing.start-free-trial')}
                                 <ArrowRight className="w-5 h-5 ml-2" />
                             </Button>
                         </Link>
                         <Link href={route('login')}>
                             <Button size="lg" variant="outline" className="text-lg px-8 hover:bg-main hover:text-white">
-                                {t('login')}
+                                {t('landing.login')}
                             </Button>
                         </Link>
                     </div>
                 </div>
                 {/* second section */}
                 <div className='my-10'>
-                    <img
-                        src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop"
+                     <img
+                        src="/assets/banner.png"
                         alt="Restaurant"
-                        className="relative rounded-2xl shadow-2xl w-full h-96 object-cover"
+                        className="relative rounded-2xl shadow-2xl w-full h-fit object-cover"
                     />
+
                 </div>
             </div>
 

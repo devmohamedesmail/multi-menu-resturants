@@ -18,9 +18,9 @@ export default function DashboardMealsTab({ meals = [], setEditingMeal, setMealD
                 <CardHeader>
                     <div className="flex items-center justify-between">
                         <div>
-                            <CardTitle>{t('manage-meals')}</CardTitle>
+                            <CardTitle>{t('dashboard.manage-meals')}</CardTitle>
                             <CardDescription className='mt-5'>
-                                {t('manage-meals-desc')}
+                                {t('dashboard.manage-meals-desc')}
                             </CardDescription>
                         </div>
                         <Button
@@ -30,14 +30,14 @@ export default function DashboardMealsTab({ meals = [], setEditingMeal, setMealD
                                 setMealDialogOpen(true)
                             }}>
                             <Plus className="w-4 h-4 mr-2  " />
-                            {t('add-meal')}
+                            {t('dashboard.add-meal')}
                         </Button>
                     </div>
                 </CardHeader>
                 <CardContent>
                     {meals.length === 0 ? (
                         <div className="text-center py-12 text-gray-500">
-                            {t('no-meals')}
+                            {t('dashboard.no-meals')}
                         </div>
                     ) : (
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

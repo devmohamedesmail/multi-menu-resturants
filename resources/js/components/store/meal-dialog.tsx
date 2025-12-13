@@ -77,13 +77,13 @@ export default function MealDialog({ open, onClose, categories, attributes = [],
     )
 
     const validationSchema = Yup.object({
-        category_id: Yup.number().required(t('required-field')),
-        name_en: Yup.string().required(t('required-field')),
-        name_ar: Yup.string().required(t('required-field')),
+        category_id: Yup.number().required(t('common.required-field')),
+        name_en: Yup.string().required(t('common.required-field')),
+        name_ar: Yup.string().required(t('common.required-field')),
         description_en: Yup.string(),
         description_ar: Yup.string(),
-        price: Yup.number().min(0, t('must-be-positive')).required(t('required-field')),
-        sale_price: Yup.number().min(0, t('must-be-positive')),
+        price: Yup.number().min(0, t('common.must-be-positive')).required(t('common.required-field')),
+        sale_price: Yup.number().min(0, t('common.must-be-positive')),
     })
 
     const formik = useFormik({
@@ -117,7 +117,7 @@ export default function MealDialog({ open, onClose, categories, attributes = [],
             if (imageFile) {
                 formData.append('image', imageFile)
             } else if (!meal) {
-                formik.setFieldError('image', t('required-field'))
+                formik.setFieldError('image', t('common.required-field'))
                 return
             }
 
@@ -163,23 +163,23 @@ export default function MealDialog({ open, onClose, categories, attributes = [],
             <DialogContent className="sm:max-w-[625px] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>
-                        {meal ? t('edit-meal') : t('add-meal')}
+                        {meal ? t('dashboard.edit-meal') : t('dashboard.add-meal')}
                     </DialogTitle>
                     <DialogDescription>
-                        {t('fill-meal-details')}
+                        {t('dashboard.fill-meal-details')}
                     </DialogDescription>
                 </DialogHeader>
 
                 <form onSubmit={formik.handleSubmit} className="space-y-4">
                     {/* Category Selection */}
                     <div className="space-y-2">
-                        <Label htmlFor="category_id">{t('category')}</Label>
+                        <Label htmlFor="category_id">{t('dashboard.category')}</Label>
                         <Select
                             value={formik.values.category_id.toString()}
                             onValueChange={(value) => formik.setFieldValue('category_id', parseInt(value))}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder={t('select-category')} />
+                                <SelectValue placeholder={t('dashboard.select-category')} />
                             </SelectTrigger>
                             <SelectContent>
                                 {categories.map((cat) => (
@@ -196,14 +196,14 @@ export default function MealDialog({ open, onClose, categories, attributes = [],
 
                     {/* English Name */}
                     <div className="space-y-2">
-                        <Label htmlFor="name_en">{t('meal-name-en')}</Label>
+                        <Label htmlFor="name_en">{t('dashboard.meal-name-en')}</Label>
                         <Input
                             id="name_en"
                             name="name_en"
                             value={formik.values.name_en}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            placeholder={t('enter-meal-name-en')}
+                            placeholder={t('dashboard.enter-meal-name-en')}
                         />
                         {formik.touched.name_en && formik.errors.name_en && (
                             <p className="text-sm text-red-500">{formik.errors.name_en}</p>
@@ -212,14 +212,14 @@ export default function MealDialog({ open, onClose, categories, attributes = [],
 
                     {/* Arabic Name */}
                     <div className="space-y-2">
-                        <Label htmlFor="name_ar">{t('meal-name-ar')}</Label>
+                        <Label htmlFor="name_ar">{t('dashboard.meal-name-ar')}</Label>
                         <Input
                             id="name_ar"
                             name="name_ar"
                             value={formik.values.name_ar}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            placeholder={t('enter-meal-name-ar')}
+                            placeholder={t('dashboard.enter-meal-name-ar')}
                             dir="rtl"
                         />
                         {formik.touched.name_ar && formik.errors.name_ar && (
@@ -229,28 +229,28 @@ export default function MealDialog({ open, onClose, categories, attributes = [],
 
                     {/* English Description */}
                     <div className="space-y-2">
-                        <Label htmlFor="description_en">{t('description-en')}</Label>
+                        <Label htmlFor="description_en">{t('dashboard.description-en')}</Label>
                         <Textarea
                             id="description_en"
                             name="description_en"
                             value={formik.values.description_en}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            placeholder={t('enter-description-en')}
+                            placeholder={t('dashboard.enter-description-en')}
                             rows={3}
                         />
                     </div>
 
                     {/* Arabic Description */}
                     <div className="space-y-2">
-                        <Label htmlFor="description_ar">{t('description-ar')}</Label>
+                        <Label htmlFor="description_ar">{t('dashboard.description-ar')}</Label>
                         <Textarea
                             id="description_ar"
                             name="description_ar"
                             value={formik.values.description_ar}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            placeholder={t('enter-description-ar')}
+                            placeholder={t('dashboard.enter-description-ar')}
                             dir="rtl"
                             rows={3}
                         />
@@ -259,7 +259,7 @@ export default function MealDialog({ open, onClose, categories, attributes = [],
                     {/* Price and Sale Price */}
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="price">{t('price')}</Label>
+                            <Label htmlFor="price">{t('dashboard.price')}</Label>
                             <Input
                                 id="price"
                                 name="price"
@@ -276,7 +276,7 @@ export default function MealDialog({ open, onClose, categories, attributes = [],
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="sale_price">{t('sale-price')}</Label>
+                            <Label htmlFor="sale_price">{t('dashboard.sale-price')}</Label>
                             <Input
                                 id="sale_price"
                                 name="sale_price"
@@ -341,11 +341,11 @@ export default function MealDialog({ open, onClose, categories, attributes = [],
                     <div className="space-y-2">
                         <ImageUpload
                             id="meal-image"
-                            label={t('meal-image')}
+                            label={t('dashboard.meal-image')}
                             onChange={handleImageChange}
                         />
                         {!imageFile && !meal && (
-                            <p className="text-sm text-red-500">{t('image-required')}</p>
+                            <p className="text-sm text-red-500">{t('common.image-required')}</p>
                         )}
                     </div>
 
@@ -357,9 +357,9 @@ export default function MealDialog({ open, onClose, categories, attributes = [],
                             onClick={onClose}
                             disabled={formik.isSubmitting}
                         >
-                            {t('cancel')}
+                            {t('common.cancel')}
                         </Button>
-                        {isSubmitting ? "Submitting..." : "not submitting"}
+                  
                         <Button
                             className='bg-main hover:bg-second'
                             type="submit"
@@ -369,7 +369,7 @@ export default function MealDialog({ open, onClose, categories, attributes = [],
                             {formik.isSubmitting && (
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             )}
-                            {meal ? t('update') : t('create')}
+                            {meal ? t('common.update') : t('common.create')}
                         </Button>
                     </div>
                 </form>

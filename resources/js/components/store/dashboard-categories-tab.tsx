@@ -14,9 +14,9 @@ export default function DashboardCategoriesTab({ categories, setEditingCategory,
                 <CardHeader>
                     <div className="flex items-center justify-between">
                         <div>
-                            <CardTitle>{t('manage-categories')}</CardTitle>
+                            <CardTitle>{t('dashboard.manage-categories')}</CardTitle>
                             <CardDescription className='mt-5'>
-                                {t('manage-categories-desc')}
+                                {t('dashboard.manage-categories-desc')}
                             </CardDescription>
                         </div>
                         <Button
@@ -26,14 +26,14 @@ export default function DashboardCategoriesTab({ categories, setEditingCategory,
                                 setCategoryDialogOpen(true)
                             }}>
                             <Plus className="w-4 h-4 mr-2" />
-                            {t('add-category')}
+                            {t('dashboard.add-new-category')}
                         </Button>
                     </div>
                 </CardHeader>
                 <CardContent>
                     {categories.length === 0 ? (
                         <div className="text-center py-12 text-gray-500">
-                            {t('no-categories')}
+                            {t('dashboard.no-categories')}
                         </div>
                     ) : (
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
