@@ -57,8 +57,8 @@ export default function TableDialog({ table, onClose }: TableDialogProps) {
     })
 
     return (
-        <dialog id="table_dialog" className="modal modal-open">
-            <div className="modal-box max-w-md">
+        <dialog id="table_dialog" className="modal modal-open ">
+            <div className="modal-box max-w-md bg-white dark:bg-gray-800 relative">
                 <button 
                     onClick={onClose}
                     className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 bg-main hover:bg-second"

@@ -22,7 +22,7 @@ export default function LandingFooter() {
                                 
                             </span>
                         </div>
-                        <p className="text-gray-400">
+                        <p className="text-gray-400 text-sm">
                             {i18n.language === 'ar' ? app_settings.description_ar : app_settings.description_en}
                         </p>
                     </div>
@@ -43,8 +43,8 @@ export default function LandingFooter() {
                         <h3 className="font-semibold mb-4">{t('landing.contact')}</h3>
                         <p className="text-gray-400">{t('landing.contact-description')}</p>
                         <div>
-                            <p className="text-gray-400 mt-2 border-b pb-2 border-gray-200">{t('common.email')} {app_settings.contact_email}</p>
-                            <p className="text-gray-400 border-b pb-2 border-gray-200">{t('common.phone')} {app_settings.contact_phone}</p>
+                            <p className="text-gray-400 mt-2 border-b pb-2 border-gray-200">{t('common.email')} {app_settings.email}</p>
+                            <p className="text-gray-400 border-b pb-2 border-gray-200">{t('common.phone')} {app_settings.phone}</p>
                         </div>
                     </div>
                 </div>

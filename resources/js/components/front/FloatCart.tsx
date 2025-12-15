@@ -88,7 +88,7 @@ function FloatCart({ table }: Props) {
 
                                 </div>
 
-                            </>) : (<h5 className='text-white text-center'>{t('cart_empty')}</h5>)}
+                            </>) : (<h5 className='text-white text-center'>{t('menu.cart-empty')}</h5>)}
                     </ul>
                 </div>
             </div>

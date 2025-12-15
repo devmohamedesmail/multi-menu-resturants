@@ -72,7 +72,7 @@ export default function HomeCategories({ selectedCategory, setSelectedCategory, 
                             <div className={`w-16 h-16 rounded-full flex items-center justify-center ${selectedCategory === null ? 'bg-white/20' : 'bg-orange-100 dark:bg-orange-900'}`}>
                                 <Utensils className={`w-8 h-8 ${selectedCategory === null ? 'text-white' : 'text-orange-500'}`} />
                             </div>
-                            <span className="font-bold text-center text-sm">{t('all')}</span>
+                            <span className="font-bold text-center text-sm">{t('menu.all')}</span>
                             <Badge className={selectedCategory === null ? 'bg-white text-orange-500' : 'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300'}>
                                 {meals.length}
                             </Badge>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\BannerController;
 use App\Http\Controllers\admin\Category_controller;
 use App\Http\Controllers\admin\CountryController;
 use App\Http\Controllers\admin\Meal_controller;
@@ -75,6 +76,17 @@ Route::controller(Users_controller::class)->group(function(){
 
 
 
+Route::controller(BannerController::class)->group(function(){
+    Route::get('/admin/banners', 'index')->name('banners.page');
+    Route::post('/admin/store/banner', 'store')->name('banner.store');
+    Route::get('/admin/edit/banner/{id}','edit')->name('banner.edit');
+    Route::post('/admin/update/banner/{id}','update')->name('banner.update');
+    Route::get('/admin/delete/banner/{id}','delete')->name('banner.delete');
+});
+
+
+
+
 
 
 
@@ -106,12 +118,12 @@ require __DIR__.'/auth.php';
 // **************************************************************************************
 Route::controller(User_front_controller::class)->group(function(){
 
-    Route::get('/{table?}','index')->name('home');
-    Route::post('/send/order','send_order')->name('send.order');
-    Route::get('/category/meals/{id}','category_meals')->name('category.meals.page');
-    Route::get('/checkout/page','checkout_page')->name('checkout.page');
-    Route::post('/send/feedback','send_feedback')->name('send.feedback');
-    Route::get('/show/menu/','show_menu')->name('show.menu');
+    Route::get('/','index')->name('home');
+    // Route::post('/send/order','send_order')->name('send.order');
+    // Route::get('/category/meals/{id}','category_meals')->name('category.meals.page');
+    // Route::get('/checkout/page','checkout_page')->name('checkout.page');
+    // Route::post('/send/feedback','send_feedback')->name('send.feedback');
+    // Route::get('/show/menu/','show_menu')->name('show.menu');
 });
 
 

@@ -64,14 +64,14 @@ export default function Categories({ categories }: any) {
                     <form onSubmit={add_category}>
                         <div className='mb-3'>
                             <Label>
-                                {t('name-en')}
+                                {t('common.name-en')}
                             </Label>
                             <Input type="text" value={data.name_en} onChange={(e) => setData('name_en', e.target.value)} />
                             <InputError message={errors.name_en} />
                         </div>
                         <div className='mb-3'>
                             <Label>
-                                {t('name-ar')}
+                                {t('common.name-ar')}
                             </Label>
                             <Input type="text" value={data.name_ar} onChange={(e) => setData('name_ar', e.target.value)} />
                             <InputError message={errors.name_ar} />
@@ -81,7 +81,7 @@ export default function Categories({ categories }: any) {
                             <label htmlFor="image" className='border border-dashed flex justify-center items-center gap-2 py-10'>
                                 <input type="file" className='hidden' id='image' onChange={handleImageChange} />
                                 <CiImageOn size={30} />
-                                <p>{t('select-image')}</p>
+                                <p>{t('common.select-image')}</p>
                             </label>
                             {imagePreview && (
                                 <div className='mt-3'>
@@ -91,7 +91,7 @@ export default function Categories({ categories }: any) {
                             <InputError message={errors.image} />
                         </div>
 
-                        <Button type='submit'>{t('save')}</Button>
+                        <Button type='submit'>{t('common.save')}</Button>
                     </form>
 
                 </div>

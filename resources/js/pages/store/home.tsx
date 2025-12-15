@@ -133,7 +133,7 @@ export default function Home({ store, table }: Props) {
             <Head title={store.name} />
 
             <div className="min-h-screen bg-gradient-to-b from-black via-black/90 to-black">
-              
+
                 <HomeHeader showCart={showCart} setShowCart={setShowCart} cartItemsCount={cartItemsCount} store={store} />
 
 
@@ -187,7 +187,7 @@ export default function Home({ store, table }: Props) {
                                 <div className="flex items-center justify-between">
                                     <h2 className="text-2xl font-bold flex items-center gap-2">
                                         <ShoppingCart className="w-6 h-6 text-orange-500" />
-                                        {t('your-cart')}
+                                        {t('menu.your-cart')}
                                     </h2>
                                     <Button
                                         variant="ghost"
@@ -198,7 +198,7 @@ export default function Home({ store, table }: Props) {
                                     </Button>
                                 </div>
                                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                    {cartItemsCount} {t('items')}
+                                    {cartItemsCount} {t('menu.items')}
                                 </p>
                             </div>
 
@@ -208,7 +208,7 @@ export default function Home({ store, table }: Props) {
                                     <div className="text-center py-12">
                                         <ShoppingCart className="w-16 h-16 mx-auto text-gray-400 mb-4" />
                                         <p className="text-gray-500 dark:text-gray-400">
-                                            {t('cart-empty')}
+                                            {t('menu.cart-empty')}
                                         </p>
                                     </div>
                                 ) : (
@@ -298,11 +298,8 @@ export default function Home({ store, table }: Props) {
                 )}
             </div>
 
-
-             <HomeFloatButtons table={table} store={store} />
-
+            <HomeFloatButtons table={table} store={store} />
             <FloatCart />
-            {/* <BottomNav /> */}
         </>
     )
 }

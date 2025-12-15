@@ -1,8 +1,8 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, usePage } from '@inertiajs/react'
-import { LogOut, Home, User, Mail } from 'lucide-react'
-import { DropdownMenu , DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel} from '../ui/dropdown-menu'
+import { LogOut, Home, UserRound, } from 'lucide-react'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from '../ui/dropdown-menu'
 
 
 export default function DashboardHeader() {
@@ -15,37 +15,20 @@ export default function DashboardHeader() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                     <div className="flex items-center justify-between">
                         <div>
-
                             <img
                                 src={store?.image}
-                                className="w-20 h-20 rounded-full object-cover border-white border-2"
+                                className="w-16 h-16 rounded-full object-cover border-white border-2"
                                 alt={store?.name} />
-
                         </div>
                         <div>
-
-                            <h3 className='text-primary'>
-                                {store?.name}
-                            </h3>
+                            <h3 className='text-primary'>{store?.name}</h3>
                         </div>
 
-                        {/* <Link
-                            href={route('logout')}
-                            method="post"
-                            as="button"
-                            className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-sm flex items-center"
-                        >
-                            <LogOut className="w-4 h-4 mr-2" />
-                            {t('logout')}
-                        </Link> */}
+
 
                         <DropdownMenu>
-                            <DropdownMenuTrigger className="w-10 h-10 rounded-full overflow-hidden border-2 border-white cursor-pointer">
-                                <img
-                                    src={store?.image}
-                                    alt={store?.name}
-                                    className="w-full h-full object-cover"
-                                />
+                            <DropdownMenuTrigger className="w-fit h-10 px-3 flex items-center rounded-full overflow-hidden border-2 border-white cursor-pointer">
+                                <UserRound  /> <span>{user?.name}</span>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-64">
                                 <DropdownMenuLabel className="font-normal">
@@ -59,8 +42,8 @@ export default function DashboardHeader() {
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem asChild>
                                     <Link
-                                    
-                                             href={`/store/home/${store?.name}/${store?.id}`}
+
+                                        href={`/store/home/${store?.name}/${store?.id}`}
                                         className="w-full flex items-center gap-2 cursor-pointer"
                                     >
                                         <Home className="w-4 h-4" />
@@ -76,7 +59,7 @@ export default function DashboardHeader() {
                                         className="w-full flex items-center gap-2 text-red-600 cursor-pointer"
                                     >
                                         <LogOut className="w-4 h-4" />
-                                        <span>{t('logout')}</span>
+                                        <span>{t('auth.logout')}</span>
                                     </Link>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>

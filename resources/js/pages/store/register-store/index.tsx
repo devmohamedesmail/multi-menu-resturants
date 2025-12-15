@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label'
 import InputError from '@/components/input-error'
 import ImageUpload from '@/components/image-upload'
 import { CheckCircle2, Store, User, ArrowRight, ArrowLeft, Languages } from 'lucide-react'
-import LanguageSwitcher from '@/components/front/LanguageSwitcher'
+import { usePage } from '@inertiajs/react'
 import {
     Select,
     SelectContent,
@@ -21,6 +21,7 @@ import {
 
 export default function RegisterStore({ countries }: any) {
     const { t, i18n } = useTranslation()
+    const {app_settings}:any = usePage().props;
     const [currentStep, setCurrentStep] = useState(1)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const totalSteps = 2
@@ -136,8 +137,8 @@ export default function RegisterStore({ countries }: any) {
                 <div className="w-full max-w-2xl">
                     {/* Header */}
                     <div className="text-center mb-8">
-                        <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
-                            <Store className="w-8 h-8 text-primary" />
+                        <div className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full mb-4">
+                            <img src={app_settings?.logo} alt={app_settings?.title_ar} />
                         </div>
                         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
                             {t('auth.register-store')}

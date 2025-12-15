@@ -32,28 +32,17 @@ import LandingFeatures from '@/components/landing/landing-features'
 import LandingBenefits from '@/components/landing/landing-benefits'
 import LandingAction from '@/components/landing/landing-action'
 import LandingFooter from '@/components/landing/landing-footer'
+import ContactFloatButtons from '@/components/landing/contact-float-buttons'
 
 type Props = {
     categories?: { id: number; name_en: string; image: string }[]
     meals?: any[]
     table?: string
+    banners?: any[]
 }
 
-export default function LandingPage({ categories, meals, table }: Props) {
-    const { t, i18n } = useTranslation()
-    const isArabic = i18n.language === 'ar'
-    const { app_settings }:any = usePage().props
-    const { auth }:any = usePage().props
-
-
-
-    const changeLanguage = (lang: string) => {
-        i18n.changeLanguage(lang)
-    }
-
-   
-
-  
+export default function LandingPage({ banners }: Props) {
+    const { t } = useTranslation()
 
     return (
         <>
@@ -63,7 +52,7 @@ export default function LandingPage({ categories, meals, table }: Props) {
                 {/* Header/Navbar */}
                <LandingHeader />
                 {/* Hero Section */}
-               <LandingHero />
+               <LandingHero banners={banners} />
                 {/* Features Section */}
                <LandingFeatures />
                 {/* Benefits Section */}
@@ -72,6 +61,8 @@ export default function LandingPage({ categories, meals, table }: Props) {
                <LandingAction />
                 {/* Footer */}
                <LandingFooter />
+               {/* Contact Float Buttons */}
+               <ContactFloatButtons />
             </div>
         </>
     )

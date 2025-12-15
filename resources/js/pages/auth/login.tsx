@@ -1,15 +1,15 @@
 import { Head, useForm, Link } from '@inertiajs/react';
 import { LoaderCircle, Mail, Lock, ChefHat } from 'lucide-react';
 import { FormEventHandler } from 'react';
-
+import { usePage } from '@inertiajs/react';
 import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useTranslation } from 'react-i18next';
 import LanguageSelect from '@/components/ui/language-select';
+
 
 type LoginForm = {
     email: string;
@@ -23,7 +23,8 @@ interface LoginProps {
 }
 
 export default function Login({ status, canResetPassword }: LoginProps) {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const {app_settings}:any = usePage().props;
     const { data, setData, post, processing, errors, reset } = useForm<Required<LoginForm>>({
         email: '',
         password: '',
@@ -39,7 +40,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
     return (
         <>
-            <Head title={t('login')} />
+            <Head title={t('auth.login')} />
             
             <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
                 {/* Background Pattern */}
@@ -51,27 +52,28 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                         <div className="space-y-6">
                             <Link href={route('home')} className="inline-flex items-center gap-3 mb-8">
                                 <div className="bg-gradient-to-br from-orange-500 to-red-500 p-3 rounded-2xl shadow-lg">
-                                    <ChefHat className="w-8 h-8 text-white" />
+                                    {/* <ChefHat className="w-8 h-8 text-white" /> */}
+                                    <img src={app_settings.logo} alt={app_settings.title_ar} className='w-20 h-20' />
                                 </div>
                                 <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                                    {t('menu-master')}
+                                    {i18n.language === 'ar' ? app_settings.title_ar : app_settings.title_en}
                                 </span>
                             </Link>
                             
                             <div className="space-y-4">
                                 <h1 className="text-4xl font-bold text-gray-900 dark:text-white leading-tight">
-                                    {t('welcome-back')}
+                                    {t('auth.welcome-back')}
                                 </h1>
                                 <p className="text-lg text-gray-600 dark:text-gray-300">
-                                    {t('login-description')}
+                                    {t('auth.login-description')}
                                 </p>
                             </div>
                             
                             <div className="relative mt-8">
                                 <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-red-400 rounded-2xl blur-3xl opacity-20" />
                                 <img
-                                    src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&h=400&fit=crop"
-                                    alt="Restaurant"
+                                    src="/assets/login-img.png"
+                                    alt={app_settings.title_en}
                                     className="relative rounded-2xl shadow-2xl w-full"
                                 />
                             </div>
@@ -90,10 +92,12 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                 <div className="lg:hidden flex items-center justify-between mb-8">
                                     <Link href={route('home')} className="flex items-center gap-2">
                                         <div className="bg-gradient-to-br from-orange-500 to-red-500 p-2 rounded-xl">
-                                            <ChefHat className="w-6 h-6 text-white" />
+                                            {/* <ChefHat className="w-6 h-6 text-white" /> */}
+                                            <img src={app_settings.logo} alt={app_settings.title_ar} className='w-12 h-12' />
                                         </div>
                                         <span className="text-xl font-bold text-gray-900 dark:text-white">
-                                            {t('menu-master')}
+                                            
+                                           { i18n.language === 'ar' ? app_settings.title_ar : app_settings.title_en}
                                         </span>
                                     </Link>
                                     <LanguageSelect />
@@ -106,10 +110,10 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                 
                                 <div className="space-y-2 mb-8">
                                     <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                                        {t('login-to-account')}
+                                        {t('auth.login-to-account')}
                                     </h2>
                                     <p className="text-gray-600 dark:text-gray-400">
-                                        {t('enter-credentials')}
+                                        {t('auth.enter-credentials')}
                                     </p>
                                 </div>
 
@@ -122,7 +126,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                 <form onSubmit={submit} className="space-y-6">
                                     <div className="space-y-2">
                                         <Label htmlFor="email" className="text-sm font-medium">
-                                            {t('email')}
+                                            {t('auth.email')}
                                         </Label>
                                         <div className="relative">
                                             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -134,7 +138,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                                 autoComplete="email"
                                                 value={data.email}
                                                 onChange={(e) => setData('email', e.target.value)}
-                                                placeholder="email@example.com"
+                                                placeholder={t('auth.email-placeholder')}
                                                 className="pl-11 h-12 border-gray-300 dark:border-gray-600 focus:border-orange-500 focus:ring-orange-500"
                                             />
                                         </div>
@@ -144,14 +148,14 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     <div className="space-y-2">
                                         <div className="flex items-center justify-between">
                                             <Label htmlFor="password" className="text-sm font-medium">
-                                                {t('password')}
+                                                {t('auth.password')}
                                             </Label>
                                             {canResetPassword && (
                                                 <Link
                                                     href={route('password.request')}
                                                     className="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 font-medium"
                                                 >
-                                                    {t('forgot-password')}
+                                                    {t('auth.forgot-password')}
                                                 </Link>
                                             )}
                                         </div>
@@ -179,7 +183,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                             className="border-gray-300 data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
                                         />
                                         <Label htmlFor="remember" className="text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
-                                            {t('remember')}
+                                            {t('auth.remember')}
                                         </Label>
                                     </div>
 
@@ -191,22 +195,22 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                         {processing ? (
                                             <>
                                                 <LoaderCircle className="w-5 h-5 animate-spin mr-2" />
-                                                {t('logging-in')}
+                                                {t('auth.logging-in')}
                                             </>
                                         ) : (
-                                            t('login')
+                                            t('auth.login')
                                         )}
                                     </Button>
                                 </form>
 
                                 <div className="mt-8 text-center">
                                     <p className="text-gray-600 dark:text-gray-400">
-                                        {t('no-account')}{' '}
+                                        {t('auth.no-account')}{' '}
                                         <Link
                                             href={route('register')}
                                             className="text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 font-semibold"
                                         >
-                                            {t('sign-up')}
+                                            {t('auth.sign-up')}
                                         </Link>
                                     </p>
                                 </div>

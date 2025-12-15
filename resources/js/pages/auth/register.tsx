@@ -1,13 +1,13 @@
 import { Head, useForm, Link } from '@inertiajs/react';
 import { LoaderCircle, Mail, Lock, User, ChefHat } from 'lucide-react';
 import { FormEventHandler } from 'react';
-
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useTranslation } from 'react-i18next';
 import LanguageSelect from '@/components/ui/language-select';
+import { usePage } from '@inertiajs/react';
 
 type RegisterForm = {
     name: string;
@@ -17,7 +17,8 @@ type RegisterForm = {
 };
 
 export default function Register() {
-    const { t } = useTranslation();
+    const { t,i18n } = useTranslation();
+    const {app_settings}:any = usePage().props;
     const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
         name: '',
         email: '',
@@ -34,7 +35,7 @@ export default function Register() {
 
     return (
         <>
-            <Head title={t('register')} />
+            <Head title={t('auth.register')} />
             
             <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
                 {/* Background Pattern */}
@@ -46,19 +47,20 @@ export default function Register() {
                         <div className="space-y-6">
                             <Link href={route('home')} className="inline-flex items-center gap-3 mb-8">
                                 <div className="bg-gradient-to-br from-orange-500 to-red-500 p-3 rounded-2xl shadow-lg">
-                                    <ChefHat className="w-8 h-8 text-white" />
+                
+                                    <img src={app_settings.logo} alt={app_settings.title_ar} className='w-20 h-20' />
                                 </div>
                                 <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                                    {t('menu-master')}
+                                    {i18n.language === 'ar' ? app_settings.title_ar : app_settings.title_en}
                                 </span>
                             </Link>
                             
                             <div className="space-y-4">
                                 <h1 className="text-4xl font-bold text-gray-900 dark:text-white leading-tight">
-                                    {t('start-your-journey')}
+                                    {t('auth.start-your-journey')}
                                 </h1>
                                 <p className="text-lg text-gray-600 dark:text-gray-300">
-                                    {t('register-description')}
+                                    {t('auth.register-description')}
                                 </p>
                             </div>
                             
@@ -66,7 +68,7 @@ export default function Register() {
                                 <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-red-400 rounded-2xl blur-3xl opacity-20" />
                                 <img
                                     src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=400&fit=crop"
-                                    alt="Restaurant"
+                                    alt={i18n.language === 'ar' ? app_settings.title_ar : app_settings.title_en}
                                     className="relative rounded-2xl shadow-2xl w-full"
                                 />
                             </div>
@@ -85,10 +87,11 @@ export default function Register() {
                                 <div className="lg:hidden flex items-center justify-between mb-8">
                                     <Link href={route('home')} className="flex items-center gap-2">
                                         <div className="bg-gradient-to-br from-orange-500 to-red-500 p-2 rounded-xl">
-                                            <ChefHat className="w-6 h-6 text-white" />
+                                            <img src={app_settings.logo} alt={i18n.language === 'ar' ? app_settings.title_ar : app_settings.title_en} className="w-6 h-6" />
                                         </div>
                                         <span className="text-xl font-bold text-gray-900 dark:text-white">
-                                            {t('menu-master')}
+                                         
+                                            {i18n.language === 'ar' ? app_settings.title_ar : app_settings.title_en}
                                         </span>
                                     </Link>
                                     <LanguageSelect />
@@ -101,17 +104,17 @@ export default function Register() {
                                 
                                 <div className="space-y-2 mb-8">
                                     <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                                        {t('create-account')}
+                                        {t('auth.create-account')}
                                     </h2>
                                     <p className="text-gray-600 dark:text-gray-400">
-                                        {t('fill-details')}
+                                        {t('auth.fill-details')}
                                     </p>
                                 </div>
 
                                 <form onSubmit={submit} className="space-y-5">
                                     <div className="space-y-2">
                                         <Label htmlFor="name" className="text-sm font-medium">
-                                            {t('name')}
+                                            {t('auth.name')}
                                         </Label>
                                         <div className="relative">
                                             <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -124,7 +127,7 @@ export default function Register() {
                                                 value={data.name}
                                                 onChange={(e) => setData('name', e.target.value)}
                                                 disabled={processing}
-                                                placeholder={t('enter-full-name')}
+                                                placeholder={t('auth.enter-full-name')}
                                                 className="pl-11 h-12 border-gray-300 dark:border-gray-600 focus:border-orange-500 focus:ring-orange-500"
                                             />
                                         </div>
@@ -133,7 +136,7 @@ export default function Register() {
 
                                     <div className="space-y-2">
                                         <Label htmlFor="email" className="text-sm font-medium">
-                                            {t('email')}
+                                            {t('auth.email')}
                                         </Label>
                                         <div className="relative">
                                             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -145,7 +148,7 @@ export default function Register() {
                                                 value={data.email}
                                                 onChange={(e) => setData('email', e.target.value)}
                                                 disabled={processing}
-                                                placeholder="email@example.com"
+                                                placeholder={t('auth.enter-email')}
                                                 className="pl-11 h-12 border-gray-300 dark:border-gray-600 focus:border-orange-500 focus:ring-orange-500"
                                             />
                                         </div>
@@ -154,7 +157,7 @@ export default function Register() {
 
                                     <div className="space-y-2">
                                         <Label htmlFor="password" className="text-sm font-medium">
-                                            {t('password')}
+                                            {t('auth.password')}
                                         </Label>
                                         <div className="relative">
                                             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -166,7 +169,7 @@ export default function Register() {
                                                 value={data.password}
                                                 onChange={(e) => setData('password', e.target.value)}
                                                 disabled={processing}
-                                                placeholder="••••••••"
+                                                placeholder={t('auth.password-placeholder')}
                                                 className="pl-11 h-12 border-gray-300 dark:border-gray-600 focus:border-orange-500 focus:ring-orange-500"
                                             />
                                         </div>
@@ -175,7 +178,7 @@ export default function Register() {
 
                                     <div className="space-y-2">
                                         <Label htmlFor="password_confirmation" className="text-sm font-medium">
-                                            {t('confirm-password')}
+                                            {t('auth.confirm-password')}
                                         </Label>
                                         <div className="relative">
                                             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -187,7 +190,7 @@ export default function Register() {
                                                 value={data.password_confirmation}
                                                 onChange={(e) => setData('password_confirmation', e.target.value)}
                                                 disabled={processing}
-                                                placeholder="••••••••"
+                                                placeholder={t('auth.password-placeholder')}
                                                 className="pl-11 h-12 border-gray-300 dark:border-gray-600 focus:border-orange-500 focus:ring-orange-500"
                                             />
                                         </div>
@@ -202,22 +205,22 @@ export default function Register() {
                                         {processing ? (
                                             <>
                                                 <LoaderCircle className="w-5 h-5 animate-spin mr-2" />
-                                                {t('creating-account')}
+                                                {t('auth.creating-account')}
                                             </>
                                         ) : (
-                                            t('create-account')
+                                            t('auth.create-account')
                                         )}
                                     </Button>
                                 </form>
 
                                 <div className="mt-8 text-center">
                                     <p className="text-gray-600 dark:text-gray-400">
-                                        {t('already-account')}{' '}
+                                        {t('auth.already-account')}{' '}
                                         <Link
                                             href={route('login')}
                                             className="text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 font-semibold"
                                         >
-                                            {t('login')}
+                                            {t('auth.login')}
                                         </Link>
                                     </p>
                                 </div>

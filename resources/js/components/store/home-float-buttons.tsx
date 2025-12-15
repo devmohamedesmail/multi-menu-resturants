@@ -99,7 +99,7 @@ export default function HomeFloatButtons({ table, store }: any) {
 
 
             <dialog id="my_modal_3" className="modal">
-                <div className="modal-box">
+                <div className="modal-box bg-white">
                     <form method="dialog">
                         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 bg-main hover:bg-second">
                             ✕

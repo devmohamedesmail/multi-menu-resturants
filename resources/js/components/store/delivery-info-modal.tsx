@@ -9,6 +9,7 @@ import * as Yup from 'yup'
 import { router } from '@inertiajs/react'
 import { useSelector, useDispatch } from 'react-redux'
 import { reset_cart } from '@/reducers/cartSlice'
+import { Label } from '../ui/label'
 
 interface DeliveryInfoModalProps {
     store_id: number
@@ -81,7 +82,7 @@ export default function DeliveryInfoModal({ store_id, onClose }: DeliveryInfoMod
     if (showSuccess) {
         return (
             <dialog id="success_modal" className="modal modal-open">
-                <div className="modal-box text-center">
+                <div className="modal-box bg-white  text-center">
                     <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
                     <h3 className="font-bold text-2xl mb-2">{t('store.order-success')}</h3>
                     <p className="text-lg mb-4">{t('store.thank-you')}</p>
@@ -98,8 +99,8 @@ export default function DeliveryInfoModal({ store_id, onClose }: DeliveryInfoMod
 
     return (
         <dialog id="delivery_modal" className="modal modal-open">
-            <div className="modal-box max-w-2xl">
-                <button 
+            <div className="modal-box bg-white max-w-2xl">
+                <button
                     onClick={onClose}
                     className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 bg-main hover:bg-second"
                 >
@@ -110,9 +111,8 @@ export default function DeliveryInfoModal({ store_id, onClose }: DeliveryInfoMod
 
                 <form onSubmit={formik.handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium mb-2">
-                            {t('store.customer-name')}
-                        </label>
+
+                        <Label htmlFor="name" >{t('store.customer-name')}</Label>
                         <Input
                             type="text"
                             name="name"
@@ -127,9 +127,8 @@ export default function DeliveryInfoModal({ store_id, onClose }: DeliveryInfoMod
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2">
-                            {t('store.customer-phone')}
-                        </label>
+
+                        <Label htmlFor="phone" > {t('store.customer-phone')}</Label>
                         <Input
                             type="tel"
                             name="phone"
@@ -144,9 +143,7 @@ export default function DeliveryInfoModal({ store_id, onClose }: DeliveryInfoMod
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2">
-                            {t('store.delivery-address')}
-                        </label>
+                        <Label htmlFor="address" >{t('store.delivery-address')}</Label>
                         <Textarea
                             name="address"
                             value={formik.values.address}
@@ -161,9 +158,8 @@ export default function DeliveryInfoModal({ store_id, onClose }: DeliveryInfoMod
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2">
-                            {t('store.location-link')} ({t('store.optional')})
-                        </label>
+
+                        <Label htmlFor="location" > {t('store.location-link')} ({t('store.optional')})</Label>
                         <Input
                             type="text"
                             name="location"
@@ -175,9 +171,8 @@ export default function DeliveryInfoModal({ store_id, onClose }: DeliveryInfoMod
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2">
-                            {t('store.order-note')} ({t('store.optional')})
-                        </label>
+                       
+                        <Label htmlFor="note" >{t('store.order-note')} ({t('store.optional')})</Label>
                         <Textarea
                             name="note"
                             value={formik.values.note}

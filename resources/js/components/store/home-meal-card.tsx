@@ -86,7 +86,7 @@ export default function HomeMealCard({ meal , currency}: any) {
                     <div className="absolute top-3 right-3">
                         <div className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
                             <Sparkles className="w-3 h-3" />
-                            {t('sale')}
+                            {t('menu.sale')}
                         </div>
                     </div>
                 )}
@@ -159,7 +159,7 @@ export default function HomeMealCard({ meal , currency}: any) {
                             className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 shadow-md hover:shadow-lg transition-all"
                         >
                             <Plus className="w-4 h-4 mr-2" />
-                            {t('add-to-cart')}
+                            {t('menu.add-to-cart')}
                         </Button>
                     )}
                 </div>

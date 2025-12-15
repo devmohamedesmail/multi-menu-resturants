@@ -30,41 +30,30 @@ export default function LandingHeader() {
                                 {auth && auth.user ? (
                                     <div>
                                         <button className="btn" popoverTarget="popover-1" >
-                                            {t('dashboard')}
+                                            {t('dashboard.title')}
                                         </button>
 
                                         <ul className="dropdown  menu w-52 rounded-box dark:bg-black bg-white shadow-sm"
                                             popover="auto" id="popover-1" >
 
                                             <p className='px-3 py-2'>{auth?.user?.name}</p>
-                                        
-
                                             {auth?.user?.role === 'store_owner' ? (<li> <Link href={route('store.dashboard')}>{t('store.dashboard')}</Link></li>) : null}
                                             {auth?.user?.role === 'manager' ? (<li> <Link href=''>Dashorad</Link></li>) : null}
                                             {auth?.user?.role === 'user' ? (<li> <Link href=''>Dashorad</Link></li>) : null}
-                                            {auth?.user?.role === 'admin' ? (<li> <Link href='/dashboard'>{t('dashboard')}</Link></li>) : null}
+                                            {auth?.user?.role === 'admin' ? (<li> <Link href='/dashboard'>{t('dashboard.title')}</Link></li>) : null}
                                             <li>
                                                 <Link
                                                     href={route('logout')}
                                                     method="post"
                                                     as="button"
-                                                    className="w-full text-left"
+                                                    className="w-full bg-red-600 text-white text-left"
                                                 >
-                                                    {t('logout')}
+                                                    {t('auth.logout')}
                                                 </Link>
                                             </li>
                                         </ul>
                                     </div>
-                                ) : (
-                                    <>
-                                        {/* <Link href={route('login')}>
-                                            <Button className='bg-main hover:bg-second ' variant="ghost">{t('login')}</Button>
-                                        </Link>
-                                        <Link href={route('register')}>
-                                            <Button variant="ghost" className='bg-second hover:bg-main'>{t('get-started')}</Button>
-                                        </Link> */}
-                                    </>
-                                )}
+                                ) : null}
                             </div>
                         </div>
                     </div>

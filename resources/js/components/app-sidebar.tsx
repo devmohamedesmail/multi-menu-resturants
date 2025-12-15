@@ -16,24 +16,29 @@ export function AppSidebar() {
 
     const mainNavItems: NavItem[] = [
         {
-            title: t('dashboard'),
+            title: t('dashboard.title'),
             href: '/dashboard',
             icon: CircleDashed,
         },
        
         {
-            title: t('settings'),
+            title: t('dashboard.setting'),
             href: '/admin/settings',
             icon: CircleDashed,
         },
         {
-            title: t('users'),
+            title: t('dashboard.users'),
             href: '/admin/users',
             icon: CircleDashed,
         },
         {
-            title: t('countries'),
+            title: t('dashboard.countries'),
             href: '/admin/countries',
+            icon: CircleDashed,
+        },
+        {
+            title: t('dashboard.banners'),
+            href: '/admin/banners',
             icon: CircleDashed,
         },
     ];
