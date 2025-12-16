@@ -392,5 +392,37 @@
     "add-to-cart": "أضف إلى السلة",
      "welcome-to": "مرحبًا بك في",
     "explore-our-menu": "استكشف قائمتنا اللذيذة واطلب وجباتك المفضلة!"
+  },
+    "countries":{
+    "title": " إدارة الدول ",
+    "description": " إضافة وتحرير وحذف الدول لمطعمك ",
+    "add-country": " إضافة دولة جديدة ",
+    "add-description": "إنشاء إدخال دولة جديدة",
+    "country-name-en": "اسم الدولة (بالإنجليزية)",
+    "country-name-ar": "اسم الدولة (بالعربية)",
+    "enter-country-name-en": "أدخل اسم الدولة بالإنجليزية",
+    "enter-country-name-ar": "أدخل اسم الدولة بالعربية",
+    "currency-en": " العملة (بالإنجليزية)",
+    "currency-ar": "العملة (بالعربية)",
+    "enter-currency-en": "أدخل العملة بالإنجليزية",
+    "enter-currency-ar": "أدخل العملة بالعربية",
+    "country-code": "رمز الدولة",
+    "enter-country-code": "أدخل رمز الدولة (مثلاً، US، SA)",
+    "search-countries": "ابحث عن دول...",
+    "fill-country-details": "يرجى ملء تفاصيل الدولة",
+    "add-new-country": "أضف دولة",
+    "manage-countries-desc": "قم بإضافة وتحرير أو إزالة الدول بسهولة للحفاظ على دقة بيانات موقع مطعمك وتحديثها."
+
+   
+  },
+   "users":{
+    "title": " إدارة المستخدمين ",
+    "description": "عرض وإدارة مستخدمي النظام",
+    "search-users": "ابحث عن مستخدمين...",
+    "no-users-found": "لم يتم العثور على مستخدمين",
+    "try-different-search": "حاول بحثًا مختلفًا أو تحقق مرة أخرى لاح",
+    "name": " الاسم ",
+    "email": "البريد الإلكتروني",
+    "role": "الدور"
   }
 }

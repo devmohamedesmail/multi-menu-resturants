@@ -393,5 +393,37 @@
     "add-to-cart": "Add to Cart",
     "welcome-to": "Welcome to",
     "explore-our-menu": "Explore our delicious menu and order your favorite meals!"
+  },
+  "countries":{
+    "title": "Countries Management",
+    "description": "Create and manage countries for your restaurant",
+    "add-country": "Add New Country",
+    "add-description": "Create a new country entry",
+    "country-name-en": "Country Name (English)",
+    "country-name-ar": "Country Name (Arabic)",
+    "enter-country-name-en": "Enter country name in English",
+    "enter-country-name-ar": "أدخل اسم الدولة بالعربية",
+    "currency-en": "Currency (English)",
+    "currency-ar": "Currency (Arabic)",
+    "enter-currency-en": "Enter currency in English",
+    "enter-currency-ar": "أدخل العملة بالعربية",
+    "country-code": "Country Code",
+    "enter-country-code": "Enter country code (e.g., US, SA)",
+    "search-countries": "Search Countries...",
+    "fill-country-details": "Please fill in the country details",
+    "add-new-country": "Add Country",
+    "manage-countries-desc": "Easily add, edit, or remove countries to keep your restaurant's location data accurate and up-to-date."
+
+   
+  },
+  "users":{
+    "title": " Users Management ",
+    "description": "  Create and manage users for your restaurant admin panel ",
+    "search-users": "Search Users...",
+    "no-users-found": "No users found",
+    "try-different-search": "Try a different search or check back later.",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role"
   }
 }

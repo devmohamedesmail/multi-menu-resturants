@@ -67,20 +67,20 @@ export default function CountriesPage({ countries }: Props) {
         <AppLayout>
             <Head title={t('countries')} />
 
-            <div className="space-y-6">
+            <div className="space-y-6 px-10 py-8">
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                            {t('countries')}
+                            {t('countries.title')}
                         </h1>
                         <p className="text-gray-600 dark:text-gray-400 mt-1">
-                            {t('manage-countries-desc')}
+                            {t('countries.manage-countries-desc')}
                         </p>
                     </div>
                     <Button onClick={() => setShowAddForm(!showAddForm)}>
                         <Plus className="w-4 h-4 mr-2" />
-                        {t('add-country')}
+                        {t('countries.add-country')}
                     </Button>
                 </div>
 
@@ -88,63 +88,63 @@ export default function CountriesPage({ countries }: Props) {
                 {showAddForm && (
                     <Card>
                         <CardHeader>
-                            <CardTitle>{t('add-new-country')}</CardTitle>
-                            <CardDescription>{t('fill-country-details')}</CardDescription>
+                            <CardTitle>{t('countries.add-new-country')}</CardTitle>
+                            <CardDescription>{t('countries.fill-country-details')}</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <form onSubmit={handleSubmit} className="space-y-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="space-y-2">
-                                        <Label htmlFor="name_en">{t('country-name-en')}</Label>
+                                        <Label htmlFor="name_en">{t('countries.country-name-en')}</Label>
                                         <Input
                                             id="name_en"
                                             value={formData.name_en}
                                             onChange={(e) => setFormData({ ...formData, name_en: e.target.value })}
-                                            placeholder={t('enter-country-name-en')}
+                                            placeholder={t('countries.enter-country-name-en')}
                                             required
                                         />
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="name_ar">{t('country-name-ar')}</Label>
+                                        <Label htmlFor="name_ar">{t('countries.country-name-ar')}</Label>
                                         <Input
                                             id="name_ar"
                                             value={formData.name_ar}
                                             onChange={(e) => setFormData({ ...formData, name_ar: e.target.value })}
-                                            placeholder={t('enter-country-name-ar')}
+                                            placeholder={t('countries.enter-country-name-ar')}
                                             dir="rtl"
                                             required
                                         />
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="currency_en">{t('currency-en')}</Label>
+                                        <Label htmlFor="currency_en">{t('countries.currency-en')}</Label>
                                         <Input
                                             id="currency_en"
                                             value={formData.currency_en}
                                             onChange={(e) => setFormData({ ...formData, currency_en: e.target.value })}
-                                            placeholder={t('enter-currency-en')}
+                                            placeholder={t('countries.enter-currency-en')}
                                         />
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="currency_ar">{t('currency-ar')}</Label>
+                                        <Label htmlFor="currency_ar">{t('countries.currency-ar')}</Label>
                                         <Input
                                             id="currency_ar"
                                             value={formData.currency_ar}
                                             onChange={(e) => setFormData({ ...formData, currency_ar: e.target.value })}
-                                            placeholder={t('enter-currency-ar')}
+                                            placeholder={t('countries.enter-currency-ar')}
                                             dir="rtl"
                                         />
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="code">{t('country-code')}</Label>
+                                        <Label htmlFor="code">{t('countries.country-code')}</Label>
                                         <Input
                                             id="code"
                                             value={formData.code}
                                             onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                                            placeholder={t('enter-country-code')}
+                                            placeholder={t('countries.enter-country-code')}
                                             maxLength={10}
                                             required
                                         />
@@ -157,9 +157,9 @@ export default function CountriesPage({ countries }: Props) {
                                         variant="outline"
                                         onClick={() => setShowAddForm(false)}
                                     >
-                                        {t('cancel')}
+                                        {t('common.cancel')}
                                     </Button>
-                                    <Button type="submit">{t('create')}</Button>
+                                    <Button type="submit">{t('common.create')}</Button>
                                 </div>
                             </form>
                         </CardContent>
@@ -172,7 +172,7 @@ export default function CountriesPage({ countries }: Props) {
                         <div className="relative">
                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                             <Input
-                                placeholder={t('search-countries')}
+                                placeholder={t('countries.search-countries')}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="pl-10"
@@ -189,22 +189,22 @@ export default function CountriesPage({ countries }: Props) {
                                 <thead className="bg-gray-50 dark:bg-gray-800 border-b">
                                     <tr>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            {t('country-name-en')}
+                                            {t('countries.country-name-en')}
                                         </th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            {t('country-name-ar')}
+                                            {t('countries.country-name-ar')}
                                         </th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            {t('currency-en')}
+                                            {t('countries.currency-en')}
                                         </th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            {t('currency-ar')}
+                                            {t('countries.currency-ar')}
                                         </th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            {t('country-code')}
+                                            {t('countries.country-code')}
                                         </th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            {t('actions')}
+                                            {t('common.actions')}
                                         </th>
                                     </tr>
                                 </thead>
@@ -212,7 +212,7 @@ export default function CountriesPage({ countries }: Props) {
                                     {filteredCountries.length === 0 ? (
                                         <tr>
                                             <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
-                                                {t('no-countries')}
+                                                {t('countries.no-countries')}
                                             </td>
                                         </tr>
                                     ) : (
