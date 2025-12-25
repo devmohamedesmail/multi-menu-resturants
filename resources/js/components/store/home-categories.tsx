@@ -1,12 +1,37 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Badge } from '@/components/ui/badge'
 import { Utensils } from 'lucide-react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export default function HomeCategories({ selectedCategory, setSelectedCategory, categories, meals }: { selectedCategory: number | null, setSelectedCategory: (id: number | null) => void, categories: any[], meals: any[] }) {
+
+
+
+interface Category {
+    id: number,
+    name_ar: string,
+    name_en: string,
+    image: string
+    meals_count:number
+}
+
+interface meals{
+    name_ar: string,
+    name_en: string,
+    id: number,
+    image: string,
+    price: number,
+    category_id: number
+    length:number
+}
+
+export default function HomeCategories({ 
+    selectedCategory, 
+    setSelectedCategory, 
+    categories, 
+    meals 
+}: { selectedCategory: number | null, setSelectedCategory: (id: number | null) => void, categories: Category[], meals: meals }) {
 
     const { t, i18n } = useTranslation()
     const isArabic = i18n.language === 'ar'
@@ -17,7 +42,7 @@ export default function HomeCategories({ selectedCategory, setSelectedCategory, 
                 {t('store.explore-categories')}
             </h2>
 
-            <div className="relative px-4">
+            <div className="relative px-4 py-10 ">
                 <button className="prev-btn absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white p-3 rounded-full shadow-md hover:bg-orange-100">
                     <ChevronLeft className="w-6 h-6 text-orange-600" />
                 </button>
@@ -58,13 +83,13 @@ export default function HomeCategories({ selectedCategory, setSelectedCategory, 
                             spaceBetween: 24,
                         },
                     }}
-                    className="categories-swiper"
+                    className="categories-swiper  py-10"
                 >
                     {/* All Categories Slide */}
                     <SwiperSlide>
                         <button
                             onClick={() => setSelectedCategory(null)}
-                            className={`flex flex-col items-center gap-3 p-6 rounded-2xl transition-all w-full ${selectedCategory === null
+                            className={`flex flex-col items-center gap-3 p-6 rounded-2xl transition-all  w-full ${selectedCategory === null
                                 ? 'bg-gradient-to-br from-orange-500 to-red-500 text-white shadow-xl scale-105'
                                 : 'bg-white dark:bg-gray-800 hover:shadow-lg hover:scale-105'
                                 }`}
@@ -73,33 +98,30 @@ export default function HomeCategories({ selectedCategory, setSelectedCategory, 
                                 <Utensils className={`w-8 h-8 ${selectedCategory === null ? 'text-white' : 'text-orange-500'}`} />
                             </div>
                             <span className="font-bold text-center text-sm">{t('menu.all')}</span>
-                            <Badge className={selectedCategory === null ? 'bg-white text-orange-500' : 'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300'}>
-                                {meals.length}
-                            </Badge>
+                        
+                            <p> {meals.length}</p>
                         </button>
                     </SwiperSlide>
 
                     {/* Category Slides */}
-                    {categories.map((category) => (
+                    {categories.map((category:Category) => (
                         <SwiperSlide key={category.id}>
                             <button
                                 onClick={() => setSelectedCategory(category.id)}
-                                className={`flex flex-col items-center gap-3 p-6 rounded-2xl transition-all w-full ${selectedCategory === category.id
+                                className={`flex flex-col items-center gap-3 py-4 rounded-2xl transition-all w-full ${selectedCategory === category.id
                                     ? 'bg-gradient-to-br from-orange-500 to-red-500 text-white shadow-xl scale-105'
-                                    : 'bg-white hover:shadow-lg hover:scale-105'
+                                    : 'bg-gray-100 hover:shadow-lg hover:scale-105'
                                     }`}
                             >
                                 <img
                                     src={category.image}
                                     alt={isArabic ? category.name_ar : category.name_en}
-                                    className="w-40 h-40 rounded-full object-cover ring-4 ring-white dark:ring-gray-700"
+                                    className="w-28 h-28 rounded-full object-cover ring-4 ring-main dark:ring-gray-700"
                                 />
-                                <span className="font-bold text-center text-sm line-clamp-2">
+                                <span className="font-bold text-center text-sm text-black line-clamp-2">
                                     {isArabic ? category.name_ar : category.name_en}
                                 </span>
-                                <Badge className={selectedCategory === category.id ? 'bg-white text-orange-500' : 'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300'}>
-                                    {category.meals_count}
-                                </Badge>
+                                <span>{category.meals_count}</span>
                             </button>
                         </SwiperSlide>
                     ))}

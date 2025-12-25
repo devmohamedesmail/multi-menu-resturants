@@ -125,7 +125,7 @@ export default function HomeMealCard({ meal , currency}: any) {
                                 </span>
                             </div>
                         ) : (
-                            <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+                            <span className="text-md font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
                                 {price} {currency}
                             </span>
                         )}

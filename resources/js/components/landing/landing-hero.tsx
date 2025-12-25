@@ -5,7 +5,7 @@ import { Link } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, Autoplay } from 'swiper/modules'
-// import 'swiper/css'
+
 
 export default function LandingHero({ banners }: { banners?: any[] }) {
     const { t, i18n } = useTranslation()
@@ -20,7 +20,7 @@ export default function LandingHero({ banners }: { banners?: any[] }) {
                         {t('landing.revolutionary-platform')}
                     </div>
 
-                    <h1 className="text-3xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight text-center">
+                    <h1 className="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6 leading-tight text-center">
                         {t('landing.transform-your-restaurant')}
                     </h1>
 

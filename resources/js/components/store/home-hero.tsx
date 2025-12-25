@@ -1,7 +1,7 @@
 
 import { useTranslation } from 'react-i18next'
 
-export default function HomeHero({ store , table }: { store: any, table?: string }) {
+export default function HomeHero({ store, table }: { store: any, table?: string }) {
     const { t } = useTranslation()
     return (
         <section className=" container mx-auto  mb-5  ">
@@ -14,7 +14,9 @@ export default function HomeHero({ store , table }: { store: any, table?: string
                     {store.name}
                 </h2>
 
-                <h4 className='text-white mt-3'>{t('store.table-number')}: {table}</h4>
+                
+                {table ? <h4 className='text-white mt-3'>{t('store.table-number')}: {table}</h4> : null}
+
 
             </div>
         </section>

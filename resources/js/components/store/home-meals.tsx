@@ -1,13 +1,10 @@
 
 import { useTranslation } from 'react-i18next'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Plus, Minus, Sparkles } from 'lucide-react'
 import NoMealsFound from './no-meals-found'
 import HomeMealCard from './home-meal-card'
 
 
-export default function HomeMeals({ filteredMeals, selectedCategory, categories, cart, getItemPrice, addToCart, currency, updateQuantity }: any) {
+export default function HomeMeals({ filteredMeals, selectedCategory, categories,  currency }: any) {
     const { t, i18n } = useTranslation()
     const isArabic = i18n.language === 'ar'
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Head } from '@inertiajs/react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
@@ -16,8 +16,6 @@ import HomeHero from '@/components/store/home-hero'
 import HomeCategories from '@/components/store/home-categories'
 import HomeMeals from '@/components/store/home-meals'
 import HomeSearch from '@/components/store/home-search'
-import FloatCart from '@/components/front/FloatCart'
-import BottomNav from '@/components/front/BottomNav'
 import HomeFloatButtons from '@/components/store/home-float-buttons'
 
 interface Category {
@@ -129,25 +127,20 @@ export default function Home({ store, table }: Props) {
 
 
     return (
-        <>
+        <div className=''>
+        
             <Head title={store.name} />
 
-            <div className="min-h-screen bg-gradient-to-b from-black via-black/90 to-black">
+            <div className="min-h-screen bg-white dark:bg-black">
 
                 <HomeHeader showCart={showCart} setShowCart={setShowCart} cartItemsCount={cartItemsCount} store={store} />
-
-
-
                 <HomeHero
                     store={store}
                     table={table}
                 />
 
                 <div className="container mx-auto px-4 pb-12">
-
                     <HomeSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-
-
                     <HomeCategories
                         selectedCategory={selectedCategory}
                         setSelectedCategory={setSelectedCategory}
@@ -299,7 +292,7 @@ export default function Home({ store, table }: Props) {
             </div>
 
             <HomeFloatButtons table={table} store={store} />
-            <FloatCart />
-        </>
+           
+        </div>
     )
 }

@@ -4,6 +4,7 @@ import { ShoppingCart, MapPin } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import LanguageSelect from '@/components/ui/language-select'
+import AppearanceToggle from '../appearance-toggle'
 
 
 export default function HomeHeader({ showCart, setShowCart, cartItemsCount, store }: { showCart: boolean; setShowCart: (show: boolean) => void; cartItemsCount: number; store: { name: string; image: string; address?: string } }) {
@@ -29,6 +30,7 @@ export default function HomeHeader({ showCart, setShowCart, cartItemsCount, stor
                     {/* Right Actions */}
                     <div className="flex items-center gap-3">
                         <LanguageSelect />
+                        <AppearanceToggle />
                         <Button
                             onClick={() => setShowCart(!showCart)}
                             className="relative bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 shadow-lg hover:shadow-xl transition-all"
