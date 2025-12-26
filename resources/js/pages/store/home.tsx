@@ -17,6 +17,7 @@ import HomeCategories from '@/components/store/home-categories'
 import HomeMeals from '@/components/store/home-meals'
 import HomeSearch from '@/components/store/home-search'
 import HomeFloatButtons from '@/components/store/home-float-buttons'
+import toast from 'react-hot-toast'
 
 interface Category {
     id: number
@@ -100,6 +101,7 @@ export default function Home({ store, table }: Props) {
     // Cart functions using Redux
     const addToCart = (meal: Meal) => {
         dispatch(add_to_cart({ ...meal, quantity: 1 }))
+        toast.success('Meal added to cart')
     }
 
     const removeFromCartHandler = (mealId: number) => {
@@ -133,7 +135,11 @@ export default function Home({ store, table }: Props) {
 
             <div className="min-h-screen bg-white dark:bg-black">
 
-                <HomeHeader showCart={showCart} setShowCart={setShowCart} cartItemsCount={cartItemsCount} store={store} />
+                <HomeHeader 
+                  showCart={showCart} 
+                  setShowCart={setShowCart} 
+                  cartItemsCount={cartItemsCount} 
+                  store={store} />
                 <HomeHero
                     store={store}
                     table={table}
@@ -176,7 +182,7 @@ export default function Home({ store, table }: Props) {
                         />
                         <div className={`fixed top-0 ${isArabic ? 'left-0' : 'right-0'} h-full w-full max-w-md bg-white dark:bg-gray-800 shadow-2xl z-50 flex flex-col animate-in slide-in-from-${isArabic ? 'left' : 'right'}`}>
                             {/* Cart Header */}
-                            <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-950 dark:to-red-950">
+                            <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-700 dark:to-orange-800">
                                 <div className="flex items-center justify-between">
                                     <h2 className="text-2xl font-bold flex items-center gap-2">
                                         <ShoppingCart className="w-6 h-6 text-orange-500" />
@@ -190,7 +196,7 @@ export default function Home({ store, table }: Props) {
                                         <X className="w-5 h-5" />
                                     </Button>
                                 </div>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                <p className="text-sm text-gray-500 dark:text-white mt-1">
                                     {cartItemsCount} {t('menu.items')}
                                 </p>
                             </div>

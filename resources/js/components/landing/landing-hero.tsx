@@ -43,7 +43,7 @@ export default function LandingHero({ banners }: { banners?: any[] }) {
 
                     <div className='flex justify-center items-center mt-10'>
                         <Link className='bg-main text-white px-4 py-2 rounded-lg flex items-center gap-2' 
-                           href={`/store/home/${encodeURIComponent('MENU PRO')}/3`}
+                           href={`/store/home/${encodeURIComponent('menu-pro')}/3/3`}
                            >
                             {t('landing.explore-demo-restaurant')}
                             <MoveRight />

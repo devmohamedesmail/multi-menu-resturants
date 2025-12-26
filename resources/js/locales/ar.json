@@ -315,7 +315,8 @@
     "add": "إضافة",
     "view-menu": "عرض القائمة",
     "categories": " الاقسام ",
-    "meals": "الوجبات"
+    "meals": "الوجبات",
+     "send_order":" ارسل طلبك "
   },
   "dashboard": {
     "title": " لوحه التحكم",

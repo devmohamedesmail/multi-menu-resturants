@@ -7,6 +7,7 @@ import { initializeTheme } from './hooks/use-appearance';
 import store, { persistor } from './reducers/store'
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import  { Toaster } from 'react-hot-toast';
 import './i18n'
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -19,10 +20,11 @@ createInertiaApp({
         root.render(
             <Provider store={store}>
                 <PersistGate loading={null} persistor={persistor}>
-                <App {...props} />
-            </PersistGate>
+                    <App {...props} />
+                </PersistGate>
+                <Toaster />
             </Provider>
-            
+
         );
     },
     progress: {

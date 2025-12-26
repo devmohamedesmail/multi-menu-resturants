@@ -316,7 +316,8 @@
     "add": "Add",
     "view-menu": "View Menu",
     "categories": "Categories",
-    "meals": "Meals"
+    "meals": "Meals",
+    "send_order":"Send Your Order"
   },
   "dashboard": {
     "title": "Dashboard",

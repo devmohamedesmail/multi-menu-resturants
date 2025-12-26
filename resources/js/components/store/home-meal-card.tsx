@@ -107,7 +107,7 @@ export default function HomeMealCard({ meal , currency}: any) {
                         {isArabic ? meal.category.name_ar : meal.category.name_en}
                     </p>
                     {(isArabic ? meal.description_ar : meal.description_en) && (
-                        <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+                        <p className="text-xs text-gray-600 dark:text-gray-300 line-clamp-2">
                             {isArabic ? meal.description_ar : meal.description_en}
                         </p>
                     )}
@@ -117,7 +117,7 @@ export default function HomeMealCard({ meal , currency}: any) {
                     <div>
                         {meal.sale_price ? (
                             <div className="flex items-baseline gap-2">
-                                <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+                                <span className="text-md font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
                                     {price} {currency}
                                 </span>
                                 <span className="text-sm text-gray-400 line-through">

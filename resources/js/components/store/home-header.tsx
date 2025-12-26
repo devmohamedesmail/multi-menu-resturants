@@ -39,9 +39,7 @@ export default function HomeHeader({ showCart, setShowCart, cartItemsCount, stor
                             <ShoppingCart className="w-5 h-5 mr-2" />
                             <span className="hidden sm:inline">{t('menu.cart')}</span>
                             {cartItemsCount > 0 && (
-                                <Badge className="absolute -top-2 -right-2 bg-yellow-500 text-black font-bold animate-bounce">
-                                    {cartItemsCount}
-                                </Badge>
+                                <span>{cartItemsCount}</span>
                             )}
                         </Button>
                     </div>
