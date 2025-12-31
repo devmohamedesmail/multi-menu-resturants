@@ -12,7 +12,7 @@ class User_front_controller extends Controller
     public function index($table = null)
     {
         $banners = Banner::all();
-        return Inertia::render("front/landing", [
+        return Inertia::render("landing/index", [
             "banners" => $banners,
         ]);
     }
@@ -20,7 +20,7 @@ class User_front_controller extends Controller
     public function user_redirect()
     {
         // Check the role of the authenticated user
-        $bannners = Banner::all();
+        $banners = Banner::all();
         if (Auth::check()) {
             $user = Auth::user();
 
@@ -28,9 +28,9 @@ class User_front_controller extends Controller
                 return Inertia::render('dashboard');
             }
             if ($user->role === 'store_owner') {
-                return Inertia::render("front/landing", ["banners" => $bannners]);
+                return Inertia::render("front/landing", ["banners" => $banners]);
             } else {
-                return Inertia::render("front/landing", ["banners" => $bannners]);
+                return Inertia::render("landing/index", ["banners" => $banners]);
             }
 
         }

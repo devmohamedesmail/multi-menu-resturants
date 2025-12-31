@@ -1,31 +1,6 @@
-import React, { useState } from 'react'
+
 import { useTranslation } from 'react-i18next'
-import { Head, Link } from '@inertiajs/react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select'
-import {
-    QrCode,
-    Smartphone,
-    Menu,
-    TrendingUp,
-    Globe,
-    Zap,
-    ShoppingCart,
-    BarChart3,
-    ChefHat,
-    Languages,
-    ArrowRight,
-    Check,
-} from 'lucide-react'
-import { usePage } from '@inertiajs/react'
-import LanguageSelect from '@/components/ui/language-select'
+import { Head } from '@inertiajs/react'
 import LandingHeader from '@/components/landing/landing-header'
 import LandingHero from '@/components/landing/landing-hero'
 import LandingFeatures from '@/components/landing/landing-features'
@@ -34,13 +9,18 @@ import LandingAction from '@/components/landing/landing-action'
 import LandingFooter from '@/components/landing/landing-footer'
 import ContactFloatButtons from '@/components/landing/contact-float-buttons'
 
-type Props = {
-    categories?: { id: number; name_en: string; image: string }[]
-    meals?: any[]
-    table?: string
-    banners?: any[]
+
+type Banner = {
+    id: number
+    image: string
+    title_ar: string
+    title_en: string
+    description: string
 }
 
+type Props = {
+    banners?: Banner[]
+}
 export default function LandingPage({ banners }: Props) {
     const { t } = useTranslation()
 
@@ -50,19 +30,19 @@ export default function LandingPage({ banners }: Props) {
 
             <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
                 {/* Header/Navbar */}
-               <LandingHeader />
+                <LandingHeader />
                 {/* Hero Section */}
-               <LandingHero banners={banners} />
+                <LandingHero banners={banners} />
                 {/* Features Section */}
-               <LandingFeatures />
+                <LandingFeatures />
                 {/* Benefits Section */}
-               <LandingBenefits />
+                <LandingBenefits />
                 {/* CTA Section */}
-               <LandingAction />
+                <LandingAction />
                 {/* Footer */}
-               <LandingFooter />
-               {/* Contact Float Buttons */}
-               <ContactFloatButtons />
+                <LandingFooter />
+                {/* Contact Float Buttons */}
+                <ContactFloatButtons />
             </div>
         </>
     )

@@ -6,8 +6,15 @@ import { Button } from '@/components/ui/button'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, Autoplay } from 'swiper/modules'
 
+interface Banners {
+    id: number
+    title_ar: string
+    title_en: string
+    description: string
+    image: string
+}
 
-export default function LandingHero({ banners }: { banners?: any[] }) {
+export default function LandingHero({ banners }: { banners?: Banners[] }) {
     const { t, i18n } = useTranslation()
 
     return (
@@ -42,9 +49,9 @@ export default function LandingHero({ banners }: { banners?: any[] }) {
                     </div>
 
                     <div className='flex justify-center items-center mt-10'>
-                        <Link className='bg-main text-white px-4 py-2 rounded-lg flex items-center gap-2' 
-                           href={`/store/home/${encodeURIComponent('menu-pro')}/3/3`}
-                           >
+                        <Link className='bg-main text-white px-4 py-5 rounded-lg flex items-center gap-2'
+                            href={`/store/home/${encodeURIComponent('menu-pro')}/3/3`}
+                        >
                             {t('landing.explore-demo-restaurant')}
                             <MoveRight />
                         </Link>
@@ -53,7 +60,7 @@ export default function LandingHero({ banners }: { banners?: any[] }) {
 
                 {/* Banner Slider Section */}
                 <div className='my-16'>
-                    {banners && banners.length > 0 ? (
+                    {banners && banners?.length > 0 ? (
                         <div className="relative group">
                             <Swiper
                                 modules={[Navigation, Pagination, Autoplay]}
